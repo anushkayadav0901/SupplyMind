@@ -51,6 +51,7 @@ class Settings(BaseSettings):
 
     # ── AI / API Keys ──────────────────────────────────────────
     GEMINI_API_KEY: str = ""
+    GROQ_API_KEY: str = ""
 
     # ── File Storage ───────────────────────────────────────────
     UPLOAD_DIR: str = str(_PROJECT_ROOT / "data" / "uploads")

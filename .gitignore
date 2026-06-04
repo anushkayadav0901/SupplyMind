@@ -1,0 +1,43 @@
+# ── Environment & Secrets ───────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Python ──────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# ── Virtual Environments ───────────────────────────────────────
+venv/
+.venv/
+env/
+
+# ── Data (local dev artifacts) ─────────────────────────────────
+data/supplymind.db
+data/uploads/
+data/faiss_index/
+
+# ── IDE ─────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── OS ──────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── ML model artifacts ─────────────────────────────────────────
+ml/models/*.pkl
+ml/models/*.joblib
+
+# ── Node / Frontend ────────────────────────────────────────────
+node_modules/
+.next/
+.turbo/
