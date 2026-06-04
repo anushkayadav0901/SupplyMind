@@ -78,6 +78,9 @@ class Document(Base):
         default=OCRStatus.PENDING,
         server_default=OCRStatus.PENDING.value,
     )
+    ocr_method: Mapped[Optional[str]] = mapped_column(
+        String(32), nullable=True, comment="pymupdf | ocr_scanned_pdf | ocr_image"
+    )
 
     # Timestamps
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, nullable=False)

@@ -46,6 +46,7 @@ class DocumentUpdate(BaseModel):
     """Partial update — every field optional."""
     extracted_text: Optional[str] = None
     ocr_status: Optional[str] = None
+    ocr_method: Optional[str] = None
     page_count: Optional[int] = None
 
 class DocumentRead(DocumentBase):
@@ -58,9 +59,26 @@ class DocumentRead(DocumentBase):
     page_count: Optional[int] = None
     extracted_text: Optional[str] = None
     ocr_status: str
+    ocr_method: Optional[str] = None
     created_at: datetime
     updated_at: datetime
     extracted_entities: List[ExtractedEntityRead] = []
+
+class DocumentListItem(BaseModel):
+    """Lightweight schema for list views — omits extracted_text."""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    original_filename: str
+    filename: str
+    mime_type: str
+    file_size: Optional[int] = None
+    page_count: Optional[int] = None
+    ocr_status: str
+    ocr_method: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
+    entity_count: int = 0
 
 
 # =====================================================================
@@ -94,6 +112,14 @@ class VendorRead(VendorBase):
     created_at: datetime
     updated_at: datetime
     risk_predictions: List[RiskPredictionRead] = []
+
+class VendorSummary(BaseModel):
+    """Minimal vendor info for embedding in upload responses."""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+    gstin: Optional[str] = None
 
 
 # =====================================================================
@@ -136,6 +162,57 @@ class RiskPredictionRead(RiskPredictionBase):
     vendor_id: int
     feature_payload: Optional[Dict[str, Any]] = None
     predicted_at: datetime
+
+
+# =====================================================================
+#  Document Upload Response (Module 4)
+# =====================================================================
+class ExtractionSummary(BaseModel):
+    """Compact extraction summary for the upload response."""
+    document_type: Optional[str] = None
+    document_number: Optional[str] = None
+    vendor_name: Optional[str] = None
+    vendor_gstin: Optional[str] = None
+    total_amount: Optional[float] = None
+    currency: Optional[str] = None
+    line_item_count: int = 0
+    confidence_score: float = 0.0
+
+class DocumentUploadResponse(BaseModel):
+    """Response returned after a successful document upload + processing."""
+    success: bool = True
+    message: str = "Document processed successfully."
+
+    # IDs
+    document_id: int
+    entity_id: Optional[int] = None
+    vendor_id: Optional[int] = None
+
+    # Document metadata
+    original_filename: str
+    stored_filename: str
+    mime_type: str
+    file_size: Optional[int] = None
+    page_count: Optional[int] = None
+
+    # OCR info
+    ocr_status: str
+    ocr_method: Optional[str] = None
+    text_length: int = 0
+
+    # Extraction summary
+    extraction: Optional[ExtractionSummary] = None
+
+    # Vendor summary
+    vendor: Optional[VendorSummary] = None
+
+class DocumentDeleteResponse(BaseModel):
+    """Response returned after deleting a document."""
+    success: bool = True
+    message: str
+    document_id: int
+    deleted_entities: int = 0
+    file_deleted: bool = False
 
 
 # =====================================================================

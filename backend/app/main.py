@@ -21,6 +21,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.app.config import settings
 from backend.app.database import create_all_tables
 from backend.app.routers import health
+from backend.app.routers import documents as documents_router
 from backend.app import models as _models  # noqa: F401  — registers ORM tables on Base.metadata
 
 logger = logging.getLogger(__name__)
@@ -72,6 +73,7 @@ app.add_middleware(
 
 # ── Routers ────────────────────────────────────────────────────
 app.include_router(health.router, prefix=settings.API_V1_STR)
+app.include_router(documents_router.router, prefix=settings.API_V1_STR)
 
 
 # ── Root endpoint ──────────────────────────────────────────────
