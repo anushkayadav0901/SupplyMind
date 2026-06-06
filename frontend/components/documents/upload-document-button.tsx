@@ -14,25 +14,40 @@ export function UploadDocumentButton() {
   const [isUploading, setIsUploading] = useState(false);
 
   async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
+    const files = event.target.files;
 
-    if (!file) {
+    if (!files || files.length === 0) {
       return;
     }
 
     setIsUploading(true);
     setStatus(null);
 
-    try {
-      const response = await api.uploadDocument(file);
-      setStatus(response.message);
-      event.target.value = "";
-      router.refresh();
-    } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Upload failed.");
-    } finally {
-      setIsUploading(false);
+    const total = files.length;
+    let succeeded = 0;
+    let failed = 0;
+
+    for (let i = 0; i < total; i++) {
+      const file = files[i];
+      setStatus(`Uploading ${i + 1} of ${total}: ${file.name}`);
+      try {
+        await api.uploadDocument(file);
+        succeeded++;
+      } catch {
+        failed++;
+      }
     }
+
+    event.target.value = "";
+    setIsUploading(false);
+
+    if (failed === 0) {
+      setStatus(`✓ ${succeeded} file${succeeded > 1 ? "s" : ""} uploaded successfully.`);
+    } else {
+      setStatus(`${succeeded} uploaded, ${failed} failed out of ${total}.`);
+    }
+
+    router.refresh();
   }
 
   return (
@@ -42,11 +57,12 @@ export function UploadDocumentButton() {
         type="file"
         className="hidden"
         accept=".pdf,.png,.jpg,.jpeg,.txt,.doc,.docx"
+        multiple
         onChange={handleFileChange}
       />
       <Button type="button" onClick={() => inputRef.current?.click()} disabled={isUploading}>
         <Upload className="size-4" />
-        {isUploading ? "Uploading" : "Upload"}
+        {isUploading ? "Uploading…" : "Upload"}
       </Button>
       {status ? <p className="max-w-72 text-xs text-muted-foreground">{status}</p> : null}
     </div>
