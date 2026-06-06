@@ -18,6 +18,13 @@ async function getDocuments(): Promise<{ documents: DocumentListItem[]; error: s
   }
 }
 
+const statAccents: Record<string, string> = {
+  Total: "border-l-indigo-500",
+  Completed: "border-l-emerald-500",
+  Processing: "border-l-amber-500",
+  Failed: "border-l-red-500",
+};
+
 export default async function DocumentsPage() {
   const { documents, error } = await getDocuments();
   const completed = documents.filter((document) => document.ocr_status === "completed").length;
@@ -48,17 +55,25 @@ export default async function DocumentsPage() {
         </div>
       ) : null}
 
-      <section className="grid gap-4 md:grid-cols-4">
-        <Stat label="Total" value={formatNumber(documents.length)} />
-        <Stat label="Completed" value={formatNumber(completed)} />
-        <Stat label="Processing" value={formatNumber(processing)} />
-        <Stat label="Failed" value={formatNumber(failed)} />
+      <section>
+        <p className="mb-3 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+          Pipeline
+        </p>
+        <div className="grid gap-4 md:grid-cols-4">
+          <Stat label="Total" value={formatNumber(documents.length)} />
+          <Stat label="Completed" value={formatNumber(completed)} />
+          <Stat label="Processing" value={formatNumber(processing)} />
+          <Stat label="Failed" value={formatNumber(failed)} />
+        </div>
       </section>
 
       <section className="rounded-lg border border-border bg-card">
         <div className="flex flex-col gap-3 border-b border-border p-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-base font-semibold">Document Register</h2>
+            <div className="flex items-center gap-2">
+              <FileText className="size-4 text-muted-foreground" />
+              <h2 className="text-base font-semibold">Document Register</h2>
+            </div>
             <p className="mt-1 text-sm text-muted-foreground">
               {documents.length > 0
                 ? `${formatNumber(documents.length)} files available for review.`
@@ -70,21 +85,27 @@ export default async function DocumentsPage() {
         {documents.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[860px] text-left text-sm">
-              <thead className="border-b border-border bg-muted/40 text-xs uppercase text-muted-foreground">
+              <thead className="border-b border-border bg-muted/50 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                 <tr>
-                  <th className="px-4 py-3 font-medium">Document</th>
-                  <th className="px-4 py-3 font-medium">Status</th>
-                  <th className="px-4 py-3 font-medium">OCR Method</th>
-                  <th className="px-4 py-3 font-medium">Entities</th>
-                  <th className="px-4 py-3 font-medium">Size</th>
-                  <th className="px-4 py-3 font-medium">Uploaded</th>
+                  <th className="px-4 py-3 font-semibold">Document</th>
+                  <th className="px-4 py-3 font-semibold">Status</th>
+                  <th className="px-4 py-3 font-semibold">OCR Method</th>
+                  <th className="px-4 py-3 font-semibold">Entities</th>
+                  <th className="px-4 py-3 font-semibold">Size</th>
+                  <th className="px-4 py-3 font-semibold">Uploaded</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {documents.map((document) => (
-                  <tr key={document.id} className="hover:bg-muted/30">
+                {documents.map((document, index) => (
+                  <tr
+                    key={document.id}
+                    className={`transition-colors hover:bg-muted/40 ${index % 2 === 1 ? "bg-muted/20" : ""}`}
+                  >
                     <td className="px-4 py-3">
-                      <Link href={`/documents/${document.id}`} className="font-medium text-foreground hover:text-primary">
+                      <Link
+                        href={`/documents/${document.id}`}
+                        className="font-semibold text-foreground underline decoration-transparent underline-offset-2 transition-colors hover:text-indigo-600 hover:decoration-indigo-600/40"
+                      >
                         {document.original_filename}
                       </Link>
                       <p className="mt-1 text-xs text-muted-foreground">{document.mime_type}</p>
@@ -121,10 +142,11 @@ export default async function DocumentsPage() {
 }
 
 function Stat({ label, value }: { label: string; value: string }) {
+  const accent = statAccents[label] ?? "border-l-border";
   return (
-    <div className="rounded-lg border border-border bg-card p-4">
-      <p className="text-sm text-muted-foreground">{label}</p>
-      <p className="mt-2 text-2xl font-semibold">{value}</p>
+    <div className={`rounded-lg border border-border border-l-[3px] ${accent} bg-card p-4`}>
+      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="mt-2 text-3xl font-semibold tabular-nums">{value}</p>
     </div>
   );
 }

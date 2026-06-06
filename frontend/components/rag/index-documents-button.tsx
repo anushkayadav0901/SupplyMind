@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { DatabaseZap } from "lucide-react";
+import { DatabaseZap, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 
@@ -29,8 +29,12 @@ export function IndexDocumentsButton() {
   return (
     <div className="flex flex-col items-start gap-2 sm:items-end">
       <Button type="button" onClick={handleClick} disabled={isIndexing}>
-        <DatabaseZap className="size-4" />
-        {isIndexing ? "Indexing" : "Index documents"}
+        {isIndexing ? (
+          <Loader2 className="size-4 animate-spin" />
+        ) : (
+          <DatabaseZap className="size-4" />
+        )}
+        {isIndexing ? "Building index…" : "Index documents"}
       </Button>
       {status ? <p className="max-w-80 text-xs text-muted-foreground">{status}</p> : null}
     </div>

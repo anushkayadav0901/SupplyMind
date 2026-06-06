@@ -30,6 +30,20 @@ async function getVendorsData(): Promise<{
   };
 }
 
+const summaryAccents: Record<string, string> = {
+  "Total Vendors": "border-l-indigo-500",
+  "Risk Scored": "border-l-emerald-500",
+  "Elevated Risk": "border-l-red-500",
+  "With Email": "border-l-amber-500",
+};
+
+const riskLabelAccents: Record<string, string> = {
+  low: "border-l-emerald-500",
+  medium: "border-l-amber-500",
+  high: "border-l-orange-500",
+  critical: "border-l-red-500",
+};
+
 export default async function VendorsPage() {
   const { vendors, riskSummary, error } = await getVendorsData();
   const scored = vendors.filter((vendor) => vendor.latest_risk_score != null).length;
@@ -59,21 +73,32 @@ export default async function VendorsPage() {
         </div>
       ) : null}
 
-      <section className="grid gap-4 md:grid-cols-4">
-        <SummaryCard label="Total Vendors" value={formatNumber(vendors.length)} icon={Users} />
-        <SummaryCard label="Risk Scored" value={formatNumber(scored)} icon={ShieldAlert} />
-        <SummaryCard label="Elevated Risk" value={formatNumber(elevated)} icon={ShieldAlert} />
-        <SummaryCard label="With Email" value={formatNumber(withEmail)} icon={Mail} />
+      <section>
+        <p className="mb-3 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+          Overview
+        </p>
+        <div className="grid gap-4 md:grid-cols-4">
+          <SummaryCard label="Total Vendors" value={formatNumber(vendors.length)} icon={Users} />
+          <SummaryCard label="Risk Scored" value={formatNumber(scored)} icon={ShieldAlert} />
+          <SummaryCard label="Elevated Risk" value={formatNumber(elevated)} icon={ShieldAlert} />
+          <SummaryCard label="With Email" value={formatNumber(withEmail)} icon={Mail} />
+        </div>
       </section>
 
       <section className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
         <div className="rounded-lg border border-border bg-card p-5">
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+            Distribution
+          </p>
           <h2 className="text-base font-semibold">Risk Labels</h2>
-          <div className="mt-4 space-y-3">
+          <div className="mt-4 space-y-2.5">
             {["low", "medium", "high", "critical"].map((label) => (
-              <div key={label} className="flex items-center justify-between gap-4">
+              <div
+                key={label}
+                className={`flex items-center justify-between gap-4 rounded-md border border-border border-l-[3px] ${riskLabelAccents[label]} bg-muted/20 px-3 py-2.5`}
+              >
                 <StatusBadge value={label} />
-                <span className="text-sm font-medium">
+                <span className="text-sm font-semibold tabular-nums">
                   {formatNumber(riskSummary?.distribution[label] ?? 0)}
                 </span>
               </div>
@@ -83,6 +108,9 @@ export default async function VendorsPage() {
 
         <div className="rounded-lg border border-border bg-card">
           <div className="border-b border-border p-5">
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+              Registry
+            </p>
             <h2 className="text-base font-semibold">Vendor Register</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               {vendors.length > 0
@@ -93,22 +121,31 @@ export default async function VendorsPage() {
           {vendors.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="w-full min-w-[820px] text-left text-sm">
-                <thead className="border-b border-border bg-muted/40 text-xs uppercase text-muted-foreground">
+                <thead className="border-b border-border bg-muted/50 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                   <tr>
-                    <th className="px-4 py-3 font-medium">Vendor</th>
-                    <th className="px-4 py-3 font-medium">Contact</th>
-                    <th className="px-4 py-3 font-medium">Risk</th>
-                    <th className="px-4 py-3 font-medium">Score</th>
-                    <th className="px-4 py-3 font-medium">Documents</th>
-                    <th className="px-4 py-3 font-medium">Added</th>
+                    <th className="px-4 py-3 font-semibold">Vendor</th>
+                    <th className="px-4 py-3 font-semibold">Contact</th>
+                    <th className="px-4 py-3 font-semibold">Risk</th>
+                    <th className="px-4 py-3 font-semibold">Score</th>
+                    <th className="px-4 py-3 font-semibold">Documents</th>
+                    <th className="px-4 py-3 font-semibold">Added</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
-                  {vendors.map((vendor) => (
-                      <tr key={vendor.id} className="hover:bg-muted/30">
+                  {vendors.map((vendor, index) => (
+                      <tr
+                        key={vendor.id}
+                        className={`transition-colors hover:bg-muted/40 ${index % 2 === 1 ? "bg-muted/20" : ""}`}
+                      >
                         <td className="px-4 py-3">
-                          <p className="font-medium">{vendor.name}</p>
-                          <p className="mt-1 text-xs text-muted-foreground">{vendor.gstin ?? "GSTIN not captured"}</p>
+                          <p className="font-semibold text-foreground">{vendor.name}</p>
+                          {vendor.gstin ? (
+                            <span className="mt-1 inline-block rounded border border-border bg-muted/40 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+                              {vendor.gstin}
+                            </span>
+                          ) : (
+                            <p className="mt-1 text-xs text-muted-foreground">GSTIN not captured</p>
+                          )}
                         </td>
                         <td className="px-4 py-3">
                           <div className="space-y-1 text-xs text-muted-foreground">
@@ -125,7 +162,7 @@ export default async function VendorsPage() {
                         <td className="px-4 py-3">
                           <StatusBadge value={vendor.latest_risk_label ?? "unscored"} />
                         </td>
-                        <td className="px-4 py-3 font-medium">
+                        <td className="px-4 py-3 font-medium tabular-nums">
                           {vendor.latest_risk_score != null ? formatPercent(vendor.latest_risk_score) : "Not scored"}
                         </td>
                         <td className="px-4 py-3 text-muted-foreground">
@@ -167,13 +204,16 @@ function SummaryCard({
   value: string;
   icon: React.ComponentType<{ className?: string }>;
 }) {
+  const accent = summaryAccents[label] ?? "border-l-border";
   return (
-    <div className="rounded-lg border border-border bg-card p-4">
+    <div className={`rounded-lg border border-border border-l-[3px] ${accent} bg-card p-4`}>
       <div className="flex items-center justify-between gap-3">
-        <p className="text-sm text-muted-foreground">{label}</p>
-        <Icon className="size-4 text-muted-foreground" />
+        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+        <div className="flex size-8 items-center justify-center rounded-full bg-muted/60">
+          <Icon className="size-4 text-muted-foreground" />
+        </div>
       </div>
-      <p className="mt-3 text-2xl font-semibold">{value}</p>
+      <p className="mt-3 text-3xl font-semibold tabular-nums">{value}</p>
     </div>
   );
 }

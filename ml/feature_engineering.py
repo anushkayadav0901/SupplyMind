@@ -162,6 +162,7 @@ def build_preprocessor() -> ColumnTransformer:
         ],
         remainder="drop",
         verbose_feature_names_out=True,
+        
     )
 
 

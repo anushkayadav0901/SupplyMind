@@ -23,21 +23,23 @@ export function EmptyState({
     <div
       className={
         framed
-          ? "flex min-h-56 flex-col items-center justify-center rounded-lg border border-dashed border-border bg-muted/20 px-6 py-10 text-center"
-          : "flex min-h-56 flex-col items-center justify-center px-6 py-10 text-center"
+          ? "flex min-h-64 flex-col items-center justify-center rounded-lg border border-dashed border-border bg-muted/10 px-8 py-12 text-center"
+          : "flex min-h-64 flex-col items-center justify-center px-8 py-12 text-center"
       }
     >
-      <div className="flex size-10 items-center justify-center rounded-md border border-border bg-background text-muted-foreground">
-        <Icon className="size-5" />
+      <div className="flex size-12 items-center justify-center rounded-lg border border-border bg-muted/40 text-muted-foreground">
+        <Icon className="size-5.5" />
       </div>
-      <h3 className="mt-4 text-base font-semibold text-foreground">{title}</h3>
-      <p className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">
+      <h3 className="mt-5 text-[15px] font-semibold tracking-tight text-foreground">
+        {title}
+      </h3>
+      <p className="mt-1.5 max-w-sm text-sm leading-relaxed text-muted-foreground">
         {description}
       </p>
       {action ? (
         <Link
           href={action.href}
-          className="mt-5 inline-flex h-8 items-center justify-center rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/85"
+          className="mt-6 inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium tracking-tight text-primary-foreground transition-colors hover:bg-primary/90"
         >
           {action.label}
         </Link>

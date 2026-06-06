@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AlertCircle, ArrowLeft, FileText } from "lucide-react";
+import { AlertCircle, ArrowLeft, FileText, MessageSquare, Shield } from "lucide-react";
 import { RagQuestionPanel } from "@/components/rag/rag-question-panel";
 import { StatusBadge } from "@/components/status-badge";
 import { api } from "@/lib/api";
@@ -28,6 +28,13 @@ async function getDocumentDetail(id: number): Promise<DocumentDetailData> {
   }
 }
 
+const detailAccents: Record<string, string> = {
+  "File Size": "border-l-indigo-500",
+  Pages: "border-l-emerald-500",
+  "OCR Method": "border-l-amber-500",
+  Uploaded: "border-l-slate-400",
+};
+
 export default async function DocumentDetailPage({
   params,
 }: {
@@ -43,7 +50,7 @@ export default async function DocumentDetailPage({
   return (
     <div className="space-y-8">
       <div>
-        <Link href="/documents" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+        <Link href="/documents" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
           <ArrowLeft className="size-4" />
           Back to documents
         </Link>
@@ -69,11 +76,16 @@ export default async function DocumentDetailPage({
 
       {document ? (
         <>
-          <section className="grid gap-4 md:grid-cols-4">
-            <Detail label="File Size" value={formatBytes(document.file_size)} />
-            <Detail label="Pages" value={formatNumber(document.page_count)} />
-            <Detail label="OCR Method" value={titleCase(document.ocr_method)} />
-            <Detail label="Uploaded" value={formatDate(document.created_at)} />
+          <section>
+            <p className="mb-3 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+              File Details
+            </p>
+            <div className="grid gap-4 md:grid-cols-4">
+              <Detail label="File Size" value={formatBytes(document.file_size)} />
+              <Detail label="Pages" value={formatNumber(document.page_count)} />
+              <Detail label="OCR Method" value={titleCase(document.ocr_method)} />
+              <Detail label="Uploaded" value={formatDate(document.created_at)} />
+            </div>
           </section>
 
           <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
@@ -82,26 +94,37 @@ export default async function DocumentDetailPage({
                 <FileText className="size-4 text-muted-foreground" />
                 <h2 className="text-base font-semibold">Extracted Text Summary</h2>
               </div>
-              <p className="mt-4 whitespace-pre-wrap text-sm leading-6 text-muted-foreground">
-                {textPreview}
-                {document.extracted_text && document.extracted_text.length > 1200 ? "..." : ""}
-              </p>
+              <div className="relative mt-4 max-h-72 overflow-y-auto">
+                <p className="whitespace-pre-wrap font-mono text-[13px] leading-6 text-muted-foreground">
+                  {textPreview}
+                  {document.extracted_text && document.extracted_text.length > 1200 ? "..." : ""}
+                </p>
+                <div className="pointer-events-none sticky bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-card to-transparent" />
+              </div>
             </div>
 
             <div className="rounded-lg border border-border bg-card p-5">
-              <h2 className="text-base font-semibold">Vendor and Risk</h2>
+              <div className="flex items-center gap-2">
+                <Shield className="size-4 text-muted-foreground" />
+                <h2 className="text-base font-semibold">Vendor &amp; Risk</h2>
+              </div>
               {vendor ? (
                 <div className="mt-4 space-y-4">
-                  <Detail label="Vendor" value={vendor.name} compact />
-                  <Detail label="GSTIN" value={vendor.gstin ?? "Not available"} compact />
-                  <Detail label="Documents" value={formatNumber(vendor.document_count)} compact />
-                  <Detail label="Predictions" value={formatNumber(vendor.prediction_count)} compact />
-                  <div className="flex items-center justify-between gap-4 border-t border-border pt-4">
-                    <span className="text-sm text-muted-foreground">Latest Risk</span>
-                    <div className="flex items-center gap-2">
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Vendor Name</p>
+                    <p className="mt-1 text-lg font-semibold text-foreground">{vendor.name}</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <CompactDetail label="GSTIN" value={vendor.gstin ?? "Not available"} />
+                    <CompactDetail label="Documents" value={formatNumber(vendor.document_count)} />
+                    <CompactDetail label="Predictions" value={formatNumber(vendor.prediction_count)} />
+                  </div>
+                  <div className="rounded-md border border-border bg-muted/30 px-4 py-3">
+                    <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">Latest Risk Assessment</p>
+                    <div className="flex items-center gap-3">
                       <StatusBadge value={vendor.latest_prediction?.risk_label ?? "unscored"} />
                       {vendor.latest_prediction?.risk_score != null ? (
-                        <span className="text-sm font-medium">
+                        <span className="text-lg font-semibold tabular-nums">
                           {formatPercent(vendor.latest_prediction.risk_score)}
                         </span>
                       ) : null}
@@ -118,6 +141,9 @@ export default async function DocumentDetailPage({
 
           <section className="rounded-lg border border-border bg-card">
             <div className="border-b border-border p-5">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                Extraction
+              </p>
               <h2 className="text-base font-semibold">Structured Entities</h2>
               <p className="mt-1 text-sm text-muted-foreground">
                 {formatNumber(document.extracted_entities.length)} extracted records linked to this document.
@@ -129,14 +155,21 @@ export default async function DocumentDetailPage({
                   <div key={entity.id} className="p-5">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div>
-                        <p className="text-sm font-medium">{titleCase(entity.entity_type)}</p>
+                        <p className="text-sm font-semibold text-foreground">{titleCase(entity.entity_type)}</p>
                         <p className="mt-1 text-xs text-muted-foreground">
-                          Confidence {entity.confidence_score != null ? formatPercent(entity.confidence_score) : "Not available"}
+                          Confidence{" "}
+                          <span className="font-medium text-foreground">
+                            {entity.confidence_score != null ? formatPercent(entity.confidence_score) : "N/A"}
+                          </span>
                         </p>
                       </div>
-                      {entity.vendor_id ? <span className="text-xs text-muted-foreground">Vendor #{entity.vendor_id}</span> : null}
+                      {entity.vendor_id ? (
+                        <span className="rounded-full border border-border bg-muted/40 px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                          Vendor #{entity.vendor_id}
+                        </span>
+                      ) : null}
                     </div>
-                    <pre className="mt-3 overflow-x-auto rounded-md border border-border bg-muted/30 p-3 text-xs leading-5 text-muted-foreground">
+                    <pre className="mt-3 overflow-x-auto rounded-md border border-border bg-muted/50 p-4 font-mono text-xs leading-5 text-muted-foreground">
                       {JSON.stringify(entity.entity_data, null, 2)}
                     </pre>
                   </div>
@@ -149,7 +182,10 @@ export default async function DocumentDetailPage({
 
           <section>
             <div className="mb-3">
-              <h2 className="text-base font-semibold">Ask About This Document</h2>
+              <div className="flex items-center gap-2">
+                <MessageSquare className="size-4 text-muted-foreground" />
+                <h2 className="text-base font-semibold">Ask About This Document</h2>
+              </div>
               <p className="mt-1 text-sm text-muted-foreground">
                 Questions are scoped to this document when the RAG index is available.
               </p>
@@ -162,11 +198,21 @@ export default async function DocumentDetailPage({
   );
 }
 
-function Detail({ label, value, compact = false }: { label: string; value: string; compact?: boolean }) {
+function Detail({ label, value }: { label: string; value: string }) {
+  const accent = detailAccents[label] ?? "border-l-border";
   return (
-    <div className={compact ? "flex items-center justify-between gap-4" : "rounded-lg border border-border bg-card p-4"}>
-      <p className="text-sm text-muted-foreground">{label}</p>
-      <p className={compact ? "text-sm font-medium text-right" : "mt-2 text-lg font-semibold"}>{value}</p>
+    <div className={`rounded-lg border border-border border-l-[3px] ${accent} bg-card p-4`}>
+      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="mt-2 text-lg font-semibold">{value}</p>
+    </div>
+  );
+}
+
+function CompactDetail({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className="mt-0.5 text-sm font-medium">{value}</p>
     </div>
   );
 }
