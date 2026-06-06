@@ -22,6 +22,9 @@ from backend.app.config import settings
 from backend.app.database import create_all_tables
 from backend.app.routers import health
 from backend.app.routers import documents as documents_router
+from backend.app.routers import vendors as vendors_router
+from backend.app.routers import analytics as analytics_router
+from backend.app.routers import rag as rag_router
 from backend.app import models as _models  # noqa: F401  — registers ORM tables on Base.metadata
 
 logger = logging.getLogger(__name__)
@@ -74,6 +77,9 @@ app.add_middleware(
 # ── Routers ────────────────────────────────────────────────────
 app.include_router(health.router, prefix=settings.API_V1_STR)
 app.include_router(documents_router.router, prefix=settings.API_V1_STR)
+app.include_router(vendors_router.router, prefix=settings.API_V1_STR)
+app.include_router(analytics_router.router, prefix=settings.API_V1_STR)
+app.include_router(rag_router.router, prefix=settings.API_V1_STR)
 
 
 # ── Root endpoint ──────────────────────────────────────────────

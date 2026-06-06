@@ -24,3 +24,13 @@ numpy>=1.26.0,<3.0.0
 
 # ── AI / Groq API (Module 3) ───────────────────────────────────
 groq>=0.23.0,<1.0.0
+
+# ── ML / Risk Prediction (Module 5) ───────────────────────────
+scikit-learn>=1.5.0,<2.0.0
+xgboost>=2.0.0,<3.0.0
+pandas>=2.2.0,<3.0.0
+joblib>=1.4.0,<2.0.0
+
+# ── RAG Pipeline (Module 7) ───────────────────────────────────
+sentence-transformers>=3.0.0,<4.0.0
+faiss-cpu>=1.8.0,<2.0.0

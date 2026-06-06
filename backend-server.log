@@ -1,0 +1,783 @@
+2026-06-04 18:24:31,658 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:24:31,658 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("documents")
+2026-06-04 18:24:31,659 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-04 18:24:31,660 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("vendors")
+2026-06-04 18:24:31,660 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-04 18:24:31,660 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("extracted_entities")
+2026-06-04 18:24:31,661 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-04 18:24:31,661 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("risk_predictions")
+2026-06-04 18:24:31,661 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-04 18:24:31,661 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-04 18:24:37,343 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:24:37,344 INFO sqlalchemy.engine.Engine SELECT 1
+2026-06-04 18:24:37,345 INFO sqlalchemy.engine.Engine [generated in 0.00057s] ()
+INFO:     127.0.0.1:56273 - "GET /api/v1/health HTTP/1.1" 200 OK
+2026-06-04 18:24:37,348 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:24:58,853 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:24:58,854 INFO sqlalchemy.engine.Engine SELECT 1
+2026-06-04 18:24:58,855 INFO sqlalchemy.engine.Engine [cached since 21.51s ago] ()
+INFO:     127.0.0.1:62070 - "GET /api/v1/health HTTP/1.1" 200 OK
+2026-06-04 18:24:58,857 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:25:12,567 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:25:12,576 INFO sqlalchemy.engine.Engine SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.original_filename AS documents_original_filename, documents.file_path AS documents_file_path, documents.mime_type AS documents_mime_type, documents.file_size AS documents_file_size, documents.page_count AS documents_page_count, documents.extracted_text AS documents_extracted_text, documents.ocr_status AS documents_ocr_status, documents.ocr_method AS documents_ocr_method, documents.created_at AS documents_created_at, documents.updated_at AS documents_updated_at 
+FROM documents 
+WHERE documents.ocr_status = ? AND documents.extracted_text IS NOT NULL
+2026-06-04 18:25:12,576 INFO sqlalchemy.engine.Engine [generated in 0.00097s] ('COMPLETED',)
+2026-06-04 18:25:12,590 INFO sqlalchemy.engine.Engine SELECT extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.id AS extracted_entities_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.document_id IN (?, ?, ?, ?, ?)
+2026-06-04 18:25:12,591 INFO sqlalchemy.engine.Engine [generated in 0.00117s] (1, 2, 3, 4, 5)
+INFO:     127.0.0.1:62074 - "POST /api/v1/rag/index-documents HTTP/1.1" 200 OK
+2026-06-04 18:26:08,553 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:60590 - "POST /api/v1/rag/ask HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55013 - "GET /api/v1/rag/documents-indexed HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55012 - "GET /api/v1/rag/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56666 - "GET /api/v1/rag/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49673 - "GET /api/v1/rag/documents-indexed HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49671 - "GET /api/v1/rag/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57102 - "OPTIONS /api/v1/rag/ask HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57102 - "POST /api/v1/rag/ask HTTP/1.1" 200 OK
+2026-06-04 18:29:23,168 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:29:23,173 INFO sqlalchemy.engine.Engine SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.original_filename AS documents_original_filename, documents.file_path AS documents_file_path, documents.mime_type AS documents_mime_type, documents.file_size AS documents_file_size, documents.page_count AS documents_page_count, documents.extracted_text AS documents_extracted_text, documents.ocr_status AS documents_ocr_status, documents.ocr_method AS documents_ocr_method, documents.created_at AS documents_created_at, documents.updated_at AS documents_updated_at 
+FROM documents ORDER BY documents.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-04 18:29:23,174 INFO sqlalchemy.engine.Engine [generated in 0.00142s] (5, 0)
+2026-06-04 18:29:23,175 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:29:23,179 INFO sqlalchemy.engine.Engine SELECT extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.id AS extracted_entities_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.document_id IN (?, ?, ?, ?, ?)
+2026-06-04 18:29:23,182 INFO sqlalchemy.engine.Engine SELECT documents.ocr_status AS documents_ocr_status, count(documents.id) AS count_1 
+FROM documents GROUP BY documents.ocr_status
+2026-06-04 18:29:23,183 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:29:23,183 INFO sqlalchemy.engine.Engine [cached since 250.6s ago] (5, 4, 3, 2, 1)
+2026-06-04 18:29:23,184 INFO sqlalchemy.engine.Engine [generated in 0.00265s] ()
+INFO:     127.0.0.1:52661 - "GET /api/v1/documents?skip=0&limit=5 HTTP/1.1" 200 OK
+2026-06-04 18:29:23,188 INFO sqlalchemy.engine.Engine SELECT vendors.id AS vendors_id, vendors.name AS vendors_name, vendors.gstin AS vendors_gstin, vendors.pan AS vendors_pan, vendors.contact_email AS vendors_contact_email, vendors.contact_phone AS vendors_contact_phone, vendors.address AS vendors_address, vendors.website AS vendors_website, vendors.created_at AS vendors_created_at, vendors.updated_at AS vendors_updated_at 
+FROM vendors ORDER BY vendors.name ASC
+ LIMIT ? OFFSET ?
+2026-06-04 18:29:23,193 INFO sqlalchemy.engine.Engine SELECT count(vendors.id) AS count_1 
+FROM vendors
+2026-06-04 18:29:23,197 INFO sqlalchemy.engine.Engine [generated in 0.00347s] ()
+2026-06-04 18:29:23,197 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:29:23,196 INFO sqlalchemy.engine.Engine [generated in 0.00748s] (5, 0)
+2026-06-04 18:29:23,201 INFO sqlalchemy.engine.Engine SELECT count(distinct(risk_predictions.vendor_id)) AS count_1 
+FROM risk_predictions
+2026-06-04 18:29:23,205 INFO sqlalchemy.engine.Engine [generated in 0.00447s] ()
+2026-06-04 18:29:23,205 INFO sqlalchemy.engine.Engine SELECT extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.id AS extracted_entities_id, extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IN (?)
+2026-06-04 18:29:23,208 INFO sqlalchemy.engine.Engine [generated in 0.00349s] (1,)
+2026-06-04 18:29:23,207 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities
+2026-06-04 18:29:23,216 INFO sqlalchemy.engine.Engine SELECT risk_predictions.vendor_id AS risk_predictions_vendor_id, risk_predictions.id AS risk_predictions_id, risk_predictions.risk_score AS risk_predictions_risk_score, risk_predictions.risk_label AS risk_predictions_risk_label, risk_predictions.model_version AS risk_predictions_model_version, risk_predictions.feature_payload AS risk_predictions_feature_payload, risk_predictions.predicted_at AS risk_predictions_predicted_at 
+FROM risk_predictions 
+WHERE risk_predictions.vendor_id IN (?)
+2026-06-04 18:29:23,217 INFO sqlalchemy.engine.Engine [generated in 0.01004s] ()
+2026-06-04 18:29:23,218 INFO sqlalchemy.engine.Engine [generated in 0.00158s] (1,)
+2026-06-04 18:29:23,220 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IS NOT NULL
+2026-06-04 18:29:23,221 INFO sqlalchemy.engine.Engine [generated in 0.00109s] ()
+2026-06-04 18:29:23,228 INFO sqlalchemy.engine.Engine SELECT risk_predictions.risk_label AS risk_predictions_risk_label, count(risk_predictions.id) AS count_1 
+FROM risk_predictions JOIN (SELECT risk_predictions.vendor_id AS vendor_id, max(risk_predictions.predicted_at) AS max_ts 
+FROM risk_predictions GROUP BY risk_predictions.vendor_id) AS anon_1 ON risk_predictions.vendor_id = anon_1.vendor_id AND risk_predictions.predicted_at = anon_1.max_ts GROUP BY risk_predictions.risk_label
+INFO:     127.0.0.1:52662 - "GET /api/v1/vendors?skip=0&limit=5 HTTP/1.1" 200 OK
+2026-06-04 18:29:23,229 INFO sqlalchemy.engine.Engine [generated in 0.00109s] ()
+2026-06-04 18:29:23,230 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:29:23,233 INFO sqlalchemy.engine.Engine SELECT extracted_entities.entity_data AS extracted_entities_entity_data 
+FROM extracted_entities
+2026-06-04 18:29:23,235 INFO sqlalchemy.engine.Engine [generated in 0.00211s] ()
+INFO:     127.0.0.1:52660 - "GET /api/v1/analytics/overview HTTP/1.1" 200 OK
+2026-06-04 18:29:23,238 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:29:25,131 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:29:25,133 INFO sqlalchemy.engine.Engine SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.original_filename AS documents_original_filename, documents.file_path AS documents_file_path, documents.mime_type AS documents_mime_type, documents.file_size AS documents_file_size, documents.page_count AS documents_page_count, documents.extracted_text AS documents_extracted_text, documents.ocr_status AS documents_ocr_status, documents.ocr_method AS documents_ocr_method, documents.created_at AS documents_created_at, documents.updated_at AS documents_updated_at 
+FROM documents ORDER BY documents.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-04 18:29:25,133 INFO sqlalchemy.engine.Engine [cached since 1.961s ago] (100, 0)
+2026-06-04 18:29:25,135 INFO sqlalchemy.engine.Engine SELECT extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.id AS extracted_entities_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.document_id IN (?, ?, ?, ?, ?)
+2026-06-04 18:29:25,135 INFO sqlalchemy.engine.Engine [cached since 252.5s ago] (5, 4, 3, 2, 1)
+INFO:     127.0.0.1:52660 - "GET /api/v1/documents?skip=0&limit=100 HTTP/1.1" 200 OK
+2026-06-04 18:29:25,140 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:29:29,691 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:29:29,698 INFO sqlalchemy.engine.Engine SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.original_filename AS documents_original_filename, documents.file_path AS documents_file_path, documents.mime_type AS documents_mime_type, documents.file_size AS documents_file_size, documents.page_count AS documents_page_count, documents.extracted_text AS documents_extracted_text, documents.ocr_status AS documents_ocr_status, documents.ocr_method AS documents_ocr_method, documents.created_at AS documents_created_at, documents.updated_at AS documents_updated_at 
+FROM documents 
+WHERE documents.id = ?
+ LIMIT ? OFFSET ?
+2026-06-04 18:29:29,699 INFO sqlalchemy.engine.Engine [generated in 0.00118s] (5, 1, 0)
+2026-06-04 18:29:29,701 INFO sqlalchemy.engine.Engine SELECT extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.id AS extracted_entities_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.document_id IN (?)
+2026-06-04 18:29:29,702 INFO sqlalchemy.engine.Engine [cached since 257.1s ago] (5,)
+INFO:     127.0.0.1:52539 - "GET /api/v1/documents/5 HTTP/1.1" 200 OK
+2026-06-04 18:29:29,707 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:29:29,732 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:29:29,734 INFO sqlalchemy.engine.Engine SELECT vendors.id AS vendors_id, vendors.name AS vendors_name, vendors.gstin AS vendors_gstin, vendors.pan AS vendors_pan, vendors.contact_email AS vendors_contact_email, vendors.contact_phone AS vendors_contact_phone, vendors.address AS vendors_address, vendors.website AS vendors_website, vendors.created_at AS vendors_created_at, vendors.updated_at AS vendors_updated_at 
+FROM vendors 
+WHERE vendors.id = ?
+ LIMIT ? OFFSET ?
+2026-06-04 18:29:29,736 INFO sqlalchemy.engine.Engine [generated in 0.00168s] (1, 1, 0)
+2026-06-04 18:29:29,738 INFO sqlalchemy.engine.Engine SELECT extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.id AS extracted_entities_id, extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IN (?)
+2026-06-04 18:29:29,739 INFO sqlalchemy.engine.Engine [cached since 6.534s ago] (1,)
+2026-06-04 18:29:29,741 INFO sqlalchemy.engine.Engine SELECT risk_predictions.vendor_id AS risk_predictions_vendor_id, risk_predictions.id AS risk_predictions_id, risk_predictions.risk_score AS risk_predictions_risk_score, risk_predictions.risk_label AS risk_predictions_risk_label, risk_predictions.model_version AS risk_predictions_model_version, risk_predictions.feature_payload AS risk_predictions_feature_payload, risk_predictions.predicted_at AS risk_predictions_predicted_at 
+FROM risk_predictions 
+WHERE risk_predictions.vendor_id IN (?)
+2026-06-04 18:29:29,742 INFO sqlalchemy.engine.Engine [cached since 6.526s ago] (1,)
+INFO:     127.0.0.1:52540 - "GET /api/v1/vendors/1 HTTP/1.1" 200 OK
+2026-06-04 18:29:29,746 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:29:31,739 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:29:31,740 INFO sqlalchemy.engine.Engine SELECT vendors.id AS vendors_id, vendors.name AS vendors_name, vendors.gstin AS vendors_gstin, vendors.pan AS vendors_pan, vendors.contact_email AS vendors_contact_email, vendors.contact_phone AS vendors_contact_phone, vendors.address AS vendors_address, vendors.website AS vendors_website, vendors.created_at AS vendors_created_at, vendors.updated_at AS vendors_updated_at 
+FROM vendors ORDER BY vendors.name ASC
+ LIMIT ? OFFSET ?
+2026-06-04 18:29:31,742 INFO sqlalchemy.engine.Engine [cached since 8.554s ago] (100, 0)
+2026-06-04 18:29:31,743 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:29:31,745 INFO sqlalchemy.engine.Engine SELECT vendors.id AS vendors_id, vendors.name AS vendors_name, vendors.gstin AS vendors_gstin, vendors.pan AS vendors_pan, vendors.contact_email AS vendors_contact_email, vendors.contact_phone AS vendors_contact_phone, vendors.address AS vendors_address, vendors.website AS vendors_website, vendors.created_at AS vendors_created_at, vendors.updated_at AS vendors_updated_at 
+FROM vendors
+2026-06-04 18:29:31,746 INFO sqlalchemy.engine.Engine SELECT extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.id AS extracted_entities_id, extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IN (?)
+2026-06-04 18:29:31,747 INFO sqlalchemy.engine.Engine [cached since 8.542s ago] (1,)
+2026-06-04 18:29:31,746 INFO sqlalchemy.engine.Engine [generated in 0.00110s] ()
+2026-06-04 18:29:31,751 INFO sqlalchemy.engine.Engine SELECT risk_predictions.vendor_id AS risk_predictions_vendor_id, risk_predictions.id AS risk_predictions_id, risk_predictions.risk_score AS risk_predictions_risk_score, risk_predictions.risk_label AS risk_predictions_risk_label, risk_predictions.model_version AS risk_predictions_model_version, risk_predictions.feature_payload AS risk_predictions_feature_payload, risk_predictions.predicted_at AS risk_predictions_predicted_at 
+FROM risk_predictions 
+WHERE risk_predictions.vendor_id IN (?)
+2026-06-04 18:29:31,752 INFO sqlalchemy.engine.Engine [cached since 8.535s ago] (1,)
+2026-06-04 18:29:31,753 INFO sqlalchemy.engine.Engine SELECT extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.id AS extracted_entities_id, extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IN (?)
+2026-06-04 18:29:31,753 INFO sqlalchemy.engine.Engine [cached since 8.549s ago] (1,)
+2026-06-04 18:29:31,756 INFO sqlalchemy.engine.Engine SELECT risk_predictions.vendor_id AS risk_predictions_vendor_id, risk_predictions.id AS risk_predictions_id, risk_predictions.risk_score AS risk_predictions_risk_score, risk_predictions.risk_label AS risk_predictions_risk_label, risk_predictions.model_version AS risk_predictions_model_version, risk_predictions.feature_payload AS risk_predictions_feature_payload, risk_predictions.predicted_at AS risk_predictions_predicted_at 
+FROM risk_predictions 
+WHERE risk_predictions.vendor_id IN (?)
+INFO:     127.0.0.1:52539 - "GET /api/v1/vendors?skip=0&limit=100 HTTP/1.1" 200 OK
+2026-06-04 18:29:31,757 INFO sqlalchemy.engine.Engine [cached since 8.541s ago] (1,)
+2026-06-04 18:29:31,759 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:52540 - "GET /api/v1/vendors/risk-summary HTTP/1.1" 200 OK
+2026-06-04 18:29:31,765 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:29:33,772 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:29:33,773 INFO sqlalchemy.engine.Engine SELECT documents.ocr_status AS documents_ocr_status, count(documents.id) AS count_1 
+FROM documents GROUP BY documents.ocr_status
+2026-06-04 18:29:33,775 INFO sqlalchemy.engine.Engine [cached since 10.59s ago] ()
+2026-06-04 18:29:33,777 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:29:33,779 INFO sqlalchemy.engine.Engine SELECT count(vendors.id) AS count_1 
+FROM vendors
+2026-06-04 18:29:33,779 INFO sqlalchemy.engine.Engine [cached since 10.59s ago] ()
+2026-06-04 18:29:33,778 INFO sqlalchemy.engine.Engine SELECT avg(documents.file_size) AS avg_1 
+FROM documents
+2026-06-04 18:29:33,781 INFO sqlalchemy.engine.Engine SELECT count(distinct(risk_predictions.vendor_id)) AS count_1 
+FROM risk_predictions
+2026-06-04 18:29:33,783 INFO sqlalchemy.engine.Engine [cached since 10.58s ago] ()
+2026-06-04 18:29:33,783 INFO sqlalchemy.engine.Engine [generated in 0.00436s] ()
+2026-06-04 18:29:33,792 INFO sqlalchemy.engine.Engine SELECT extracted_entities.vendor_id AS extracted_entities_vendor_id, count(extracted_entities.id) AS doc_count 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IS NOT NULL GROUP BY extracted_entities.vendor_id
+2026-06-04 18:29:33,796 INFO sqlalchemy.engine.Engine [generated in 0.00410s] ()
+2026-06-04 18:29:33,795 INFO sqlalchemy.engine.Engine SELECT sum(documents.page_count) AS sum_1 
+FROM documents
+2026-06-04 18:29:33,800 INFO sqlalchemy.engine.Engine [generated in 0.00454s] ()
+2026-06-04 18:29:33,799 INFO sqlalchemy.engine.Engine SELECT risk_predictions.risk_label AS risk_predictions_risk_label, count(risk_predictions.id) AS count_1 
+FROM risk_predictions JOIN (SELECT risk_predictions.vendor_id AS vendor_id, max(risk_predictions.predicted_at) AS max_ts 
+FROM risk_predictions GROUP BY risk_predictions.vendor_id) AS anon_1 ON risk_predictions.vendor_id = anon_1.vendor_id AND risk_predictions.predicted_at = anon_1.max_ts GROUP BY risk_predictions.risk_label
+2026-06-04 18:29:33,803 INFO sqlalchemy.engine.Engine [cached since 10.57s ago] ()
+2026-06-04 18:29:33,805 INFO sqlalchemy.engine.Engine SELECT count(vendors.id) AS count_1 
+FROM vendors 
+WHERE vendors.contact_email IS NOT NULL
+2026-06-04 18:29:33,803 INFO sqlalchemy.engine.Engine SELECT documents.ocr_method AS documents_ocr_method, count(documents.id) AS count_1 
+FROM documents 
+WHERE documents.ocr_method IS NOT NULL GROUP BY documents.ocr_method
+2026-06-04 18:29:33,810 INFO sqlalchemy.engine.Engine [generated in 0.00798s] ()
+2026-06-04 18:29:33,809 INFO sqlalchemy.engine.Engine [generated in 0.00476s] ()
+2026-06-04 18:29:33,812 INFO sqlalchemy.engine.Engine SELECT documents.mime_type AS documents_mime_type, count(documents.id) AS count_1 
+FROM documents GROUP BY documents.mime_type
+2026-06-04 18:29:33,815 INFO sqlalchemy.engine.Engine [generated in 0.00234s] ()
+2026-06-04 18:29:33,814 INFO sqlalchemy.engine.Engine SELECT count(vendors.id) AS count_1 
+FROM vendors 
+WHERE vendors.gstin IS NOT NULL
+2026-06-04 18:29:33,821 INFO sqlalchemy.engine.Engine [generated in 0.00674s] ()
+2026-06-04 18:29:33,820 INFO sqlalchemy.engine.Engine SELECT date(documents.created_at) AS day, count(documents.id) AS count 
+FROM documents GROUP BY date(documents.created_at) ORDER BY date(documents.created_at) DESC
+ LIMIT ? OFFSET ?
+2026-06-04 18:29:33,826 INFO sqlalchemy.engine.Engine [generated in 0.00558s] (30, 0)
+2026-06-04 18:29:33,824 INFO sqlalchemy.engine.Engine SELECT max(vendors.created_at) AS max_1 
+FROM vendors
+2026-06-04 18:29:33,829 INFO sqlalchemy.engine.Engine [generated in 0.00468s] ()
+2026-06-04 18:29:33,828 INFO sqlalchemy.engine.Engine SELECT max(documents.created_at) AS max_1 
+FROM documents
+INFO:     127.0.0.1:52540 - "GET /api/v1/analytics/vendors HTTP/1.1" 200 OK
+2026-06-04 18:29:33,835 INFO sqlalchemy.engine.Engine [generated in 0.00721s] ()
+2026-06-04 18:29:33,838 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:52539 - "GET /api/v1/analytics/documents HTTP/1.1" 200 OK
+2026-06-04 18:29:33,840 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:29:33,887 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:29:33,889 INFO sqlalchemy.engine.Engine SELECT risk_predictions.risk_label AS risk_predictions_risk_label, count(risk_predictions.id) AS count_1 
+FROM risk_predictions JOIN (SELECT risk_predictions.vendor_id AS vendor_id, max(risk_predictions.predicted_at) AS max_ts 
+FROM risk_predictions GROUP BY risk_predictions.vendor_id) AS anon_1 ON risk_predictions.vendor_id = anon_1.vendor_id AND risk_predictions.predicted_at = anon_1.max_ts GROUP BY risk_predictions.risk_label
+2026-06-04 18:29:33,890 INFO sqlalchemy.engine.Engine [cached since 10.66s ago] ()
+2026-06-04 18:29:33,893 INFO sqlalchemy.engine.Engine SELECT count(risk_predictions.id) AS count_1 
+FROM risk_predictions
+2026-06-04 18:29:33,894 INFO sqlalchemy.engine.Engine [generated in 0.00220s] ()
+2026-06-04 18:29:33,895 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:29:33,897 INFO sqlalchemy.engine.Engine SELECT avg(risk_predictions.risk_score) AS avg_1 
+FROM risk_predictions
+2026-06-04 18:29:33,897 INFO sqlalchemy.engine.Engine SELECT extracted_entities.entity_data AS extracted_entities_entity_data 
+FROM extracted_entities
+2026-06-04 18:29:33,901 INFO sqlalchemy.engine.Engine [cached since 10.67s ago] ()
+2026-06-04 18:29:33,900 INFO sqlalchemy.engine.Engine [generated in 0.00330s] ()
+2026-06-04 18:29:33,898 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:29:33,903 INFO sqlalchemy.engine.Engine SELECT extracted_entities.id AS extracted_entities_id, extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities
+2026-06-04 18:29:33,907 INFO sqlalchemy.engine.Engine SELECT count(risk_predictions.id) AS count_1 
+FROM risk_predictions 
+WHERE risk_predictions.risk_score >= ? AND risk_predictions.risk_score < ?
+2026-06-04 18:29:33,908 INFO sqlalchemy.engine.Engine SELECT extracted_entities.id AS extracted_entities_id, extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IS NOT NULL
+2026-06-04 18:29:33,909 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:29:33,912 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities
+2026-06-04 18:29:33,910 INFO sqlalchemy.engine.Engine [generated in 0.00418s] (0.0, 0.2)
+2026-06-04 18:29:33,911 INFO sqlalchemy.engine.Engine [generated in 0.00272s] ()
+2026-06-04 18:29:33,910 INFO sqlalchemy.engine.Engine [generated in 0.00662s] ()
+2026-06-04 18:29:33,912 INFO sqlalchemy.engine.Engine [cached since 10.7s ago] ()
+2026-06-04 18:29:33,913 INFO sqlalchemy.engine.Engine SELECT count(risk_predictions.id) AS count_1 
+FROM risk_predictions 
+WHERE risk_predictions.risk_score >= ? AND risk_predictions.risk_score < ?
+2026-06-04 18:29:33,917 INFO sqlalchemy.engine.Engine SELECT vendors.id AS vendors_id, vendors.name AS vendors_name, vendors.gstin AS vendors_gstin, vendors.pan AS vendors_pan, vendors.contact_email AS vendors_contact_email, vendors.contact_phone AS vendors_contact_phone, vendors.address AS vendors_address, vendors.website AS vendors_website, vendors.created_at AS vendors_created_at, vendors.updated_at AS vendors_updated_at 
+FROM vendors 
+WHERE vendors.id IN (?)
+2026-06-04 18:29:33,919 INFO sqlalchemy.engine.Engine SELECT count(documents.id) AS count_1 
+FROM documents
+2026-06-04 18:29:33,919 INFO sqlalchemy.engine.Engine [cached since 0.01233s ago] (0.2, 0.4)
+INFO:     127.0.0.1:59518 - "GET /api/v1/analytics/spend-summary HTTP/1.1" 200 OK
+2026-06-04 18:29:33,920 INFO sqlalchemy.engine.Engine [generated in 0.00301s] (1,)
+2026-06-04 18:29:33,920 INFO sqlalchemy.engine.Engine [generated in 0.00176s] ()
+2026-06-04 18:29:33,923 INFO sqlalchemy.engine.Engine SELECT count(risk_predictions.id) AS count_1 
+FROM risk_predictions 
+WHERE risk_predictions.risk_score >= ? AND risk_predictions.risk_score < ?
+2026-06-04 18:29:33,927 INFO sqlalchemy.engine.Engine [cached since 0.02076s ago] (0.4, 0.6)
+2026-06-04 18:29:33,925 INFO sqlalchemy.engine.Engine SELECT extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.id AS extracted_entities_id, extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IN (?)
+2026-06-04 18:29:33,926 INFO sqlalchemy.engine.Engine SELECT count(distinct(extracted_entities.document_id)) AS count_1 
+FROM extracted_entities
+2026-06-04 18:29:33,923 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:29:33,928 INFO sqlalchemy.engine.Engine SELECT count(risk_predictions.id) AS count_1 
+FROM risk_predictions 
+WHERE risk_predictions.risk_score >= ? AND risk_predictions.risk_score < ?
+2026-06-04 18:29:33,928 INFO sqlalchemy.engine.Engine [cached since 10.72s ago] (1,)
+2026-06-04 18:29:33,928 INFO sqlalchemy.engine.Engine [generated in 0.00196s] ()
+2026-06-04 18:29:33,930 INFO sqlalchemy.engine.Engine [cached since 0.02401s ago] (0.6, 0.8)
+2026-06-04 18:29:33,932 INFO sqlalchemy.engine.Engine SELECT risk_predictions.vendor_id AS risk_predictions_vendor_id, risk_predictions.id AS risk_predictions_id, risk_predictions.risk_score AS risk_predictions_risk_score, risk_predictions.risk_label AS risk_predictions_risk_label, risk_predictions.model_version AS risk_predictions_model_version, risk_predictions.feature_payload AS risk_predictions_feature_payload, risk_predictions.predicted_at AS risk_predictions_predicted_at 
+FROM risk_predictions 
+WHERE risk_predictions.vendor_id IN (?)
+2026-06-04 18:29:33,934 INFO sqlalchemy.engine.Engine SELECT extracted_entities.entity_type AS extracted_entities_entity_type, count(extracted_entities.id) AS count_1 
+FROM extracted_entities GROUP BY extracted_entities.entity_type
+2026-06-04 18:29:33,936 INFO sqlalchemy.engine.Engine SELECT count(risk_predictions.id) AS count_1 
+FROM risk_predictions 
+WHERE risk_predictions.risk_score >= ? AND risk_predictions.risk_score < ?
+2026-06-04 18:29:33,936 INFO sqlalchemy.engine.Engine [cached since 10.72s ago] (1,)
+2026-06-04 18:29:33,937 INFO sqlalchemy.engine.Engine [generated in 0.00269s] ()
+2026-06-04 18:29:33,937 INFO sqlalchemy.engine.Engine [cached since 0.03118s ago] (0.8, 1.01)
+INFO:     127.0.0.1:59519 - "GET /api/v1/analytics/top-vendors?limit=8 HTTP/1.1" 200 OK
+2026-06-04 18:29:33,942 INFO sqlalchemy.engine.Engine SELECT avg(extracted_entities.confidence_score) AS avg_1 
+FROM extracted_entities 
+WHERE extracted_entities.confidence_score IS NOT NULL
+2026-06-04 18:29:33,943 INFO sqlalchemy.engine.Engine SELECT risk_predictions.model_version AS risk_predictions_model_version, count(risk_predictions.id) AS count_1 
+FROM risk_predictions GROUP BY risk_predictions.model_version
+2026-06-04 18:29:33,947 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:29:33,948 INFO sqlalchemy.engine.Engine [generated in 0.00520s] ()
+2026-06-04 18:29:33,951 INFO sqlalchemy.engine.Engine [generated in 0.00710s] ()
+2026-06-04 18:29:33,955 INFO sqlalchemy.engine.Engine SELECT max(risk_predictions.predicted_at) AS max_1 
+FROM risk_predictions
+2026-06-04 18:29:33,956 INFO sqlalchemy.engine.Engine [generated in 0.00072s] ()
+INFO:     127.0.0.1:59517 - "GET /api/v1/analytics/risk-distribution HTTP/1.1" 200 OK
+2026-06-04 18:29:33,954 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities 
+WHERE extracted_entities.confidence_score IS NOT NULL AND extracted_entities.confidence_score >= ? AND extracted_entities.confidence_score < ?
+2026-06-04 18:29:33,959 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:29:33,960 INFO sqlalchemy.engine.Engine [generated in 0.00564s] (0.0, 0.25)
+2026-06-04 18:29:33,962 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities 
+WHERE extracted_entities.confidence_score IS NOT NULL AND extracted_entities.confidence_score >= ? AND extracted_entities.confidence_score < ?
+2026-06-04 18:29:33,963 INFO sqlalchemy.engine.Engine [cached since 0.008789s ago] (0.25, 0.5)
+2026-06-04 18:29:33,965 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities 
+WHERE extracted_entities.confidence_score IS NOT NULL AND extracted_entities.confidence_score >= ? AND extracted_entities.confidence_score < ?
+2026-06-04 18:29:33,965 INFO sqlalchemy.engine.Engine [cached since 0.0107s ago] (0.5, 0.75)
+2026-06-04 18:29:33,966 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities 
+WHERE extracted_entities.confidence_score IS NOT NULL AND extracted_entities.confidence_score >= ? AND extracted_entities.confidence_score < ?
+2026-06-04 18:29:33,967 INFO sqlalchemy.engine.Engine [cached since 0.01251s ago] (0.75, 1.01)
+2026-06-04 18:29:33,968 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IS NOT NULL
+2026-06-04 18:29:33,969 INFO sqlalchemy.engine.Engine [cached since 10.75s ago] ()
+2026-06-04 18:29:33,970 INFO sqlalchemy.engine.Engine SELECT extracted_entities.entity_data AS extracted_entities_entity_data 
+FROM extracted_entities
+2026-06-04 18:29:33,970 INFO sqlalchemy.engine.Engine [cached since 10.74s ago] ()
+INFO:     127.0.0.1:59520 - "GET /api/v1/analytics/extraction-summary HTTP/1.1" 200 OK
+2026-06-04 18:29:33,978 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:52539 - "GET /api/v1/rag/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52540 - "GET /api/v1/rag/documents-indexed HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52539 - "GET /api/v1/rag/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52540 - "GET /api/v1/rag/documents-indexed HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57349 - "OPTIONS /api/v1/rag/ask HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57349 - "POST /api/v1/rag/ask HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52441 - "GET /api/v1/rag/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52442 - "GET /api/v1/rag/documents-indexed HTTP/1.1" 200 OK
+2026-06-04 18:33:16,947 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:33:16,949 INFO sqlalchemy.engine.Engine SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.original_filename AS documents_original_filename, documents.file_path AS documents_file_path, documents.mime_type AS documents_mime_type, documents.file_size AS documents_file_size, documents.page_count AS documents_page_count, documents.extracted_text AS documents_extracted_text, documents.ocr_status AS documents_ocr_status, documents.ocr_method AS documents_ocr_method, documents.created_at AS documents_created_at, documents.updated_at AS documents_updated_at 
+FROM documents ORDER BY documents.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-04 18:33:16,949 INFO sqlalchemy.engine.Engine [cached since 233.8s ago] (100, 0)
+2026-06-04 18:33:16,951 INFO sqlalchemy.engine.Engine SELECT extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.id AS extracted_entities_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.document_id IN (?, ?, ?, ?, ?)
+2026-06-04 18:33:16,952 INFO sqlalchemy.engine.Engine [cached since 484.4s ago] (5, 4, 3, 2, 1)
+INFO:     127.0.0.1:52443 - "GET /api/v1/documents?skip=0&limit=100 HTTP/1.1" 200 OK
+2026-06-04 18:33:16,957 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:52441 - "GET /api/v1/rag/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52442 - "GET /api/v1/rag/documents-indexed HTTP/1.1" 200 OK
+2026-06-04 18:33:18,084 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:33:18,085 INFO sqlalchemy.engine.Engine SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.original_filename AS documents_original_filename, documents.file_path AS documents_file_path, documents.mime_type AS documents_mime_type, documents.file_size AS documents_file_size, documents.page_count AS documents_page_count, documents.extracted_text AS documents_extracted_text, documents.ocr_status AS documents_ocr_status, documents.ocr_method AS documents_ocr_method, documents.created_at AS documents_created_at, documents.updated_at AS documents_updated_at 
+FROM documents ORDER BY documents.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-04 18:33:18,086 INFO sqlalchemy.engine.Engine [cached since 234.9s ago] (100, 0)
+2026-06-04 18:33:18,088 INFO sqlalchemy.engine.Engine SELECT extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.id AS extracted_entities_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.document_id IN (?, ?, ?, ?, ?)
+2026-06-04 18:33:18,089 INFO sqlalchemy.engine.Engine [cached since 485.5s ago] (5, 4, 3, 2, 1)
+INFO:     127.0.0.1:52441 - "GET /api/v1/documents?skip=0&limit=100 HTTP/1.1" 200 OK
+2026-06-04 18:33:18,093 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:52441 - "GET /api/v1/rag/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52442 - "GET /api/v1/rag/documents-indexed HTTP/1.1" 200 OK
+2026-06-04 18:33:18,641 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:33:18,643 INFO sqlalchemy.engine.Engine SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.original_filename AS documents_original_filename, documents.file_path AS documents_file_path, documents.mime_type AS documents_mime_type, documents.file_size AS documents_file_size, documents.page_count AS documents_page_count, documents.extracted_text AS documents_extracted_text, documents.ocr_status AS documents_ocr_status, documents.ocr_method AS documents_ocr_method, documents.created_at AS documents_created_at, documents.updated_at AS documents_updated_at 
+FROM documents ORDER BY documents.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-04 18:33:18,644 INFO sqlalchemy.engine.Engine [cached since 235.5s ago] (100, 0)
+2026-06-04 18:33:18,646 INFO sqlalchemy.engine.Engine SELECT extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.id AS extracted_entities_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.document_id IN (?, ?, ?, ?, ?)
+2026-06-04 18:33:18,646 INFO sqlalchemy.engine.Engine [cached since 486.1s ago] (5, 4, 3, 2, 1)
+INFO:     127.0.0.1:52441 - "GET /api/v1/documents?skip=0&limit=100 HTTP/1.1" 200 OK
+2026-06-04 18:33:18,653 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:33:18,894 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:33:18,895 INFO sqlalchemy.engine.Engine SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.original_filename AS documents_original_filename, documents.file_path AS documents_file_path, documents.mime_type AS documents_mime_type, documents.file_size AS documents_file_size, documents.page_count AS documents_page_count, documents.extracted_text AS documents_extracted_text, documents.ocr_status AS documents_ocr_status, documents.ocr_method AS documents_ocr_method, documents.created_at AS documents_created_at, documents.updated_at AS documents_updated_at 
+FROM documents ORDER BY documents.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-04 18:33:18,896 INFO sqlalchemy.engine.Engine [cached since 235.7s ago] (100, 0)
+2026-06-04 18:33:18,898 INFO sqlalchemy.engine.Engine SELECT extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.id AS extracted_entities_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.document_id IN (?, ?, ?, ?, ?)
+2026-06-04 18:33:18,898 INFO sqlalchemy.engine.Engine [cached since 486.3s ago] (5, 4, 3, 2, 1)
+INFO:     127.0.0.1:52441 - "GET /api/v1/documents?skip=0&limit=100 HTTP/1.1" 200 OK
+2026-06-04 18:33:18,903 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:33:19,053 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:33:19,055 INFO sqlalchemy.engine.Engine SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.original_filename AS documents_original_filename, documents.file_path AS documents_file_path, documents.mime_type AS documents_mime_type, documents.file_size AS documents_file_size, documents.page_count AS documents_page_count, documents.extracted_text AS documents_extracted_text, documents.ocr_status AS documents_ocr_status, documents.ocr_method AS documents_ocr_method, documents.created_at AS documents_created_at, documents.updated_at AS documents_updated_at 
+FROM documents ORDER BY documents.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-04 18:33:19,056 INFO sqlalchemy.engine.Engine [cached since 235.9s ago] (100, 0)
+2026-06-04 18:33:19,058 INFO sqlalchemy.engine.Engine SELECT extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.id AS extracted_entities_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.document_id IN (?, ?, ?, ?, ?)
+2026-06-04 18:33:19,059 INFO sqlalchemy.engine.Engine [cached since 486.5s ago] (5, 4, 3, 2, 1)
+INFO:     127.0.0.1:52441 - "GET /api/v1/documents?skip=0&limit=100 HTTP/1.1" 200 OK
+2026-06-04 18:33:19,062 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:33:21,206 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:33:21,209 INFO sqlalchemy.engine.Engine SELECT documents.ocr_status AS documents_ocr_status, count(documents.id) AS count_1 
+FROM documents GROUP BY documents.ocr_status
+2026-06-04 18:33:21,210 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:33:21,210 INFO sqlalchemy.engine.Engine [cached since 238s ago] ()
+2026-06-04 18:33:21,211 INFO sqlalchemy.engine.Engine SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.original_filename AS documents_original_filename, documents.file_path AS documents_file_path, documents.mime_type AS documents_mime_type, documents.file_size AS documents_file_size, documents.page_count AS documents_page_count, documents.extracted_text AS documents_extracted_text, documents.ocr_status AS documents_ocr_status, documents.ocr_method AS documents_ocr_method, documents.created_at AS documents_created_at, documents.updated_at AS documents_updated_at 
+FROM documents ORDER BY documents.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-04 18:33:21,213 INFO sqlalchemy.engine.Engine SELECT count(vendors.id) AS count_1 
+FROM vendors
+2026-06-04 18:33:21,214 INFO sqlalchemy.engine.Engine [cached since 238s ago] (5, 0)
+2026-06-04 18:33:21,216 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:33:21,216 INFO sqlalchemy.engine.Engine [cached since 238s ago] ()
+2026-06-04 18:33:21,220 INFO sqlalchemy.engine.Engine SELECT extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.id AS extracted_entities_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.document_id IN (?, ?, ?, ?, ?)
+2026-06-04 18:33:21,222 INFO sqlalchemy.engine.Engine [cached since 488.6s ago] (5, 4, 3, 2, 1)
+2026-06-04 18:33:21,222 INFO sqlalchemy.engine.Engine SELECT count(distinct(risk_predictions.vendor_id)) AS count_1 
+FROM risk_predictions
+2026-06-04 18:33:21,220 INFO sqlalchemy.engine.Engine SELECT vendors.id AS vendors_id, vendors.name AS vendors_name, vendors.gstin AS vendors_gstin, vendors.pan AS vendors_pan, vendors.contact_email AS vendors_contact_email, vendors.contact_phone AS vendors_contact_phone, vendors.address AS vendors_address, vendors.website AS vendors_website, vendors.created_at AS vendors_created_at, vendors.updated_at AS vendors_updated_at 
+FROM vendors ORDER BY vendors.name ASC
+ LIMIT ? OFFSET ?
+INFO:     127.0.0.1:52442 - "GET /api/v1/documents?skip=0&limit=5 HTTP/1.1" 200 OK
+2026-06-04 18:33:21,223 INFO sqlalchemy.engine.Engine [cached since 238s ago] ()
+2026-06-04 18:33:21,226 INFO sqlalchemy.engine.Engine [cached since 238s ago] (5, 0)
+2026-06-04 18:33:21,227 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:33:21,228 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities
+2026-06-04 18:33:21,229 INFO sqlalchemy.engine.Engine SELECT extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.id AS extracted_entities_id, extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IN (?)
+2026-06-04 18:33:21,230 INFO sqlalchemy.engine.Engine [cached since 238s ago] ()
+2026-06-04 18:33:21,231 INFO sqlalchemy.engine.Engine [cached since 238s ago] (1,)
+2026-06-04 18:33:21,232 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IS NOT NULL
+2026-06-04 18:33:21,235 INFO sqlalchemy.engine.Engine [cached since 238s ago] ()
+2026-06-04 18:33:21,235 INFO sqlalchemy.engine.Engine SELECT risk_predictions.vendor_id AS risk_predictions_vendor_id, risk_predictions.id AS risk_predictions_id, risk_predictions.risk_score AS risk_predictions_risk_score, risk_predictions.risk_label AS risk_predictions_risk_label, risk_predictions.model_version AS risk_predictions_model_version, risk_predictions.feature_payload AS risk_predictions_feature_payload, risk_predictions.predicted_at AS risk_predictions_predicted_at 
+FROM risk_predictions 
+WHERE risk_predictions.vendor_id IN (?)
+2026-06-04 18:33:21,239 INFO sqlalchemy.engine.Engine SELECT risk_predictions.risk_label AS risk_predictions_risk_label, count(risk_predictions.id) AS count_1 
+FROM risk_predictions JOIN (SELECT risk_predictions.vendor_id AS vendor_id, max(risk_predictions.predicted_at) AS max_ts 
+FROM risk_predictions GROUP BY risk_predictions.vendor_id) AS anon_1 ON risk_predictions.vendor_id = anon_1.vendor_id AND risk_predictions.predicted_at = anon_1.max_ts GROUP BY risk_predictions.risk_label
+2026-06-04 18:33:21,239 INFO sqlalchemy.engine.Engine [cached since 238s ago] (1,)
+2026-06-04 18:33:21,239 INFO sqlalchemy.engine.Engine [cached since 238s ago] ()
+2026-06-04 18:33:21,242 INFO sqlalchemy.engine.Engine SELECT extracted_entities.entity_data AS extracted_entities_entity_data 
+FROM extracted_entities
+INFO:     127.0.0.1:52443 - "GET /api/v1/vendors?skip=0&limit=5 HTTP/1.1" 200 OK
+2026-06-04 18:33:21,243 INFO sqlalchemy.engine.Engine [cached since 238s ago] ()
+2026-06-04 18:33:21,244 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:52441 - "GET /api/v1/analytics/overview HTTP/1.1" 200 OK
+2026-06-04 18:33:21,248 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:33:44,059 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:33:44,060 INFO sqlalchemy.engine.Engine SELECT 1
+2026-06-04 18:33:44,060 INFO sqlalchemy.engine.Engine [cached since 546.7s ago] ()
+INFO:     127.0.0.1:65263 - "GET /api/v1/health HTTP/1.1" 200 OK
+2026-06-04 18:33:44,062 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:33:44,316 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:33:44,316 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:33:44,318 INFO sqlalchemy.engine.Engine SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.original_filename AS documents_original_filename, documents.file_path AS documents_file_path, documents.mime_type AS documents_mime_type, documents.file_size AS documents_file_size, documents.page_count AS documents_page_count, documents.extracted_text AS documents_extracted_text, documents.ocr_status AS documents_ocr_status, documents.ocr_method AS documents_ocr_method, documents.created_at AS documents_created_at, documents.updated_at AS documents_updated_at 
+FROM documents ORDER BY documents.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-04 18:33:44,320 INFO sqlalchemy.engine.Engine SELECT documents.ocr_status AS documents_ocr_status, count(documents.id) AS count_1 
+FROM documents GROUP BY documents.ocr_status
+2026-06-04 18:33:44,323 INFO sqlalchemy.engine.Engine [cached since 261.1s ago] ()
+2026-06-04 18:33:44,322 INFO sqlalchemy.engine.Engine [cached since 261.1s ago] (5, 0)
+2026-06-04 18:33:44,321 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:33:44,324 INFO sqlalchemy.engine.Engine SELECT count(vendors.id) AS count_1 
+FROM vendors
+2026-06-04 18:33:44,326 INFO sqlalchemy.engine.Engine SELECT vendors.id AS vendors_id, vendors.name AS vendors_name, vendors.gstin AS vendors_gstin, vendors.pan AS vendors_pan, vendors.contact_email AS vendors_contact_email, vendors.contact_phone AS vendors_contact_phone, vendors.address AS vendors_address, vendors.website AS vendors_website, vendors.created_at AS vendors_created_at, vendors.updated_at AS vendors_updated_at 
+FROM vendors ORDER BY vendors.name ASC
+ LIMIT ? OFFSET ?
+2026-06-04 18:33:44,327 INFO sqlalchemy.engine.Engine SELECT extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.id AS extracted_entities_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.document_id IN (?, ?, ?, ?, ?)
+2026-06-04 18:33:44,328 INFO sqlalchemy.engine.Engine [cached since 261.1s ago] ()
+2026-06-04 18:33:44,328 INFO sqlalchemy.engine.Engine [cached since 261.1s ago] (5, 0)
+2026-06-04 18:33:44,329 INFO sqlalchemy.engine.Engine [cached since 511.7s ago] (5, 4, 3, 2, 1)
+2026-06-04 18:33:44,330 INFO sqlalchemy.engine.Engine SELECT count(distinct(risk_predictions.vendor_id)) AS count_1 
+FROM risk_predictions
+2026-06-04 18:33:44,333 INFO sqlalchemy.engine.Engine SELECT extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.id AS extracted_entities_id, extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IN (?)
+INFO:     127.0.0.1:65267 - "GET /api/v1/documents?skip=0&limit=5 HTTP/1.1" 200 OK
+2026-06-04 18:33:44,334 INFO sqlalchemy.engine.Engine [cached since 261.1s ago] ()
+2026-06-04 18:33:44,335 INFO sqlalchemy.engine.Engine [cached since 261.1s ago] (1,)
+2026-06-04 18:33:44,339 INFO sqlalchemy.engine.Engine SELECT risk_predictions.vendor_id AS risk_predictions_vendor_id, risk_predictions.id AS risk_predictions_id, risk_predictions.risk_score AS risk_predictions_risk_score, risk_predictions.risk_label AS risk_predictions_risk_label, risk_predictions.model_version AS risk_predictions_model_version, risk_predictions.feature_payload AS risk_predictions_feature_payload, risk_predictions.predicted_at AS risk_predictions_predicted_at 
+FROM risk_predictions 
+WHERE risk_predictions.vendor_id IN (?)
+2026-06-04 18:33:44,338 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities
+2026-06-04 18:33:44,341 INFO sqlalchemy.engine.Engine [cached since 261.1s ago] ()
+2026-06-04 18:33:44,340 INFO sqlalchemy.engine.Engine [cached since 261.1s ago] (1,)
+2026-06-04 18:33:44,337 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:33:44,342 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IS NOT NULL
+2026-06-04 18:33:44,344 INFO sqlalchemy.engine.Engine [cached since 261.1s ago] ()
+2026-06-04 18:33:44,346 INFO sqlalchemy.engine.Engine SELECT risk_predictions.risk_label AS risk_predictions_risk_label, count(risk_predictions.id) AS count_1 
+FROM risk_predictions JOIN (SELECT risk_predictions.vendor_id AS vendor_id, max(risk_predictions.predicted_at) AS max_ts 
+FROM risk_predictions GROUP BY risk_predictions.vendor_id) AS anon_1 ON risk_predictions.vendor_id = anon_1.vendor_id AND risk_predictions.predicted_at = anon_1.max_ts GROUP BY risk_predictions.risk_label
+INFO:     127.0.0.1:65268 - "GET /api/v1/vendors?skip=0&limit=5 HTTP/1.1" 200 OK
+2026-06-04 18:33:44,349 INFO sqlalchemy.engine.Engine [cached since 261.1s ago] ()
+2026-06-04 18:33:44,350 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:33:44,351 INFO sqlalchemy.engine.Engine SELECT extracted_entities.entity_data AS extracted_entities_entity_data 
+FROM extracted_entities
+2026-06-04 18:33:44,352 INFO sqlalchemy.engine.Engine [cached since 261.1s ago] ()
+INFO:     127.0.0.1:65266 - "GET /api/v1/analytics/overview HTTP/1.1" 200 OK
+2026-06-04 18:33:44,355 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:34:14,452 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:34:14,455 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:34:14,455 INFO sqlalchemy.engine.Engine SELECT documents.ocr_status AS documents_ocr_status, count(documents.id) AS count_1 
+FROM documents GROUP BY documents.ocr_status
+2026-06-04 18:34:14,455 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:34:14,456 INFO sqlalchemy.engine.Engine SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.original_filename AS documents_original_filename, documents.file_path AS documents_file_path, documents.mime_type AS documents_mime_type, documents.file_size AS documents_file_size, documents.page_count AS documents_page_count, documents.extracted_text AS documents_extracted_text, documents.ocr_status AS documents_ocr_status, documents.ocr_method AS documents_ocr_method, documents.created_at AS documents_created_at, documents.updated_at AS documents_updated_at 
+FROM documents ORDER BY documents.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-04 18:34:14,456 INFO sqlalchemy.engine.Engine [cached since 291.3s ago] ()
+2026-06-04 18:34:14,458 INFO sqlalchemy.engine.Engine SELECT vendors.id AS vendors_id, vendors.name AS vendors_name, vendors.gstin AS vendors_gstin, vendors.pan AS vendors_pan, vendors.contact_email AS vendors_contact_email, vendors.contact_phone AS vendors_contact_phone, vendors.address AS vendors_address, vendors.website AS vendors_website, vendors.created_at AS vendors_created_at, vendors.updated_at AS vendors_updated_at 
+FROM vendors ORDER BY vendors.name ASC
+ LIMIT ? OFFSET ?
+2026-06-04 18:34:14,458 INFO sqlalchemy.engine.Engine [cached since 291.3s ago] (5, 0)
+2026-06-04 18:34:14,460 INFO sqlalchemy.engine.Engine SELECT count(vendors.id) AS count_1 
+FROM vendors
+2026-06-04 18:34:14,460 INFO sqlalchemy.engine.Engine [cached since 291.3s ago] (5, 0)
+2026-06-04 18:34:14,465 INFO sqlalchemy.engine.Engine SELECT extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.id AS extracted_entities_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.document_id IN (?, ?, ?, ?, ?)
+2026-06-04 18:34:14,465 INFO sqlalchemy.engine.Engine [cached since 291.3s ago] ()
+2026-06-04 18:34:14,467 INFO sqlalchemy.engine.Engine SELECT extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.id AS extracted_entities_id, extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IN (?)
+2026-06-04 18:34:14,467 INFO sqlalchemy.engine.Engine [cached since 541.9s ago] (5, 4, 3, 2, 1)
+2026-06-04 18:34:14,468 INFO sqlalchemy.engine.Engine SELECT count(distinct(risk_predictions.vendor_id)) AS count_1 
+FROM risk_predictions
+2026-06-04 18:34:14,469 INFO sqlalchemy.engine.Engine [cached since 291.3s ago] (1,)
+2026-06-04 18:34:14,470 INFO sqlalchemy.engine.Engine [cached since 291.3s ago] ()
+2026-06-04 18:34:14,473 INFO sqlalchemy.engine.Engine SELECT risk_predictions.vendor_id AS risk_predictions_vendor_id, risk_predictions.id AS risk_predictions_id, risk_predictions.risk_score AS risk_predictions_risk_score, risk_predictions.risk_label AS risk_predictions_risk_label, risk_predictions.model_version AS risk_predictions_model_version, risk_predictions.feature_payload AS risk_predictions_feature_payload, risk_predictions.predicted_at AS risk_predictions_predicted_at 
+FROM risk_predictions 
+WHERE risk_predictions.vendor_id IN (?)
+INFO:     127.0.0.1:50804 - "GET /api/v1/documents?skip=0&limit=5 HTTP/1.1" 200 OK
+2026-06-04 18:34:14,473 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities
+2026-06-04 18:34:14,474 INFO sqlalchemy.engine.Engine [cached since 291.3s ago] (1,)
+2026-06-04 18:34:14,476 INFO sqlalchemy.engine.Engine [cached since 291.3s ago] ()
+2026-06-04 18:34:14,476 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:50805 - "GET /api/v1/vendors?skip=0&limit=5 HTTP/1.1" 200 OK
+2026-06-04 18:34:14,478 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IS NOT NULL
+2026-06-04 18:34:14,481 INFO sqlalchemy.engine.Engine [cached since 291.3s ago] ()
+2026-06-04 18:34:14,481 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:34:14,483 INFO sqlalchemy.engine.Engine SELECT risk_predictions.risk_label AS risk_predictions_risk_label, count(risk_predictions.id) AS count_1 
+FROM risk_predictions JOIN (SELECT risk_predictions.vendor_id AS vendor_id, max(risk_predictions.predicted_at) AS max_ts 
+FROM risk_predictions GROUP BY risk_predictions.vendor_id) AS anon_1 ON risk_predictions.vendor_id = anon_1.vendor_id AND risk_predictions.predicted_at = anon_1.max_ts GROUP BY risk_predictions.risk_label
+2026-06-04 18:34:14,484 INFO sqlalchemy.engine.Engine [cached since 291.3s ago] ()
+2026-06-04 18:34:14,485 INFO sqlalchemy.engine.Engine SELECT extracted_entities.entity_data AS extracted_entities_entity_data 
+FROM extracted_entities
+2026-06-04 18:34:14,486 INFO sqlalchemy.engine.Engine [cached since 291.2s ago] ()
+INFO:     127.0.0.1:50803 - "GET /api/v1/analytics/overview HTTP/1.1" 200 OK
+2026-06-04 18:34:14,488 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:34:16,267 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:34:16,268 INFO sqlalchemy.engine.Engine SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.original_filename AS documents_original_filename, documents.file_path AS documents_file_path, documents.mime_type AS documents_mime_type, documents.file_size AS documents_file_size, documents.page_count AS documents_page_count, documents.extracted_text AS documents_extracted_text, documents.ocr_status AS documents_ocr_status, documents.ocr_method AS documents_ocr_method, documents.created_at AS documents_created_at, documents.updated_at AS documents_updated_at 
+FROM documents ORDER BY documents.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-04 18:34:16,269 INFO sqlalchemy.engine.Engine [cached since 293.1s ago] (100, 0)
+2026-06-04 18:34:16,271 INFO sqlalchemy.engine.Engine SELECT extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.id AS extracted_entities_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.document_id IN (?, ?, ?, ?, ?)
+2026-06-04 18:34:16,271 INFO sqlalchemy.engine.Engine [cached since 543.7s ago] (5, 4, 3, 2, 1)
+INFO:     127.0.0.1:50803 - "GET /api/v1/documents?skip=0&limit=100 HTTP/1.1" 200 OK
+2026-06-04 18:34:16,276 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:34:18,690 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:34:18,692 INFO sqlalchemy.engine.Engine SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.original_filename AS documents_original_filename, documents.file_path AS documents_file_path, documents.mime_type AS documents_mime_type, documents.file_size AS documents_file_size, documents.page_count AS documents_page_count, documents.extracted_text AS documents_extracted_text, documents.ocr_status AS documents_ocr_status, documents.ocr_method AS documents_ocr_method, documents.created_at AS documents_created_at, documents.updated_at AS documents_updated_at 
+FROM documents 
+WHERE documents.id = ?
+ LIMIT ? OFFSET ?
+2026-06-04 18:34:18,692 INFO sqlalchemy.engine.Engine [cached since 289s ago] (5, 1, 0)
+2026-06-04 18:34:18,694 INFO sqlalchemy.engine.Engine SELECT extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.id AS extracted_entities_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.document_id IN (?)
+2026-06-04 18:34:18,695 INFO sqlalchemy.engine.Engine [cached since 546.1s ago] (5,)
+INFO:     127.0.0.1:50803 - "GET /api/v1/documents/5 HTTP/1.1" 200 OK
+2026-06-04 18:34:18,698 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:34:18,785 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:34:18,787 INFO sqlalchemy.engine.Engine SELECT vendors.id AS vendors_id, vendors.name AS vendors_name, vendors.gstin AS vendors_gstin, vendors.pan AS vendors_pan, vendors.contact_email AS vendors_contact_email, vendors.contact_phone AS vendors_contact_phone, vendors.address AS vendors_address, vendors.website AS vendors_website, vendors.created_at AS vendors_created_at, vendors.updated_at AS vendors_updated_at 
+FROM vendors 
+WHERE vendors.id = ?
+ LIMIT ? OFFSET ?
+2026-06-04 18:34:18,787 INFO sqlalchemy.engine.Engine [cached since 289s ago] (1, 1, 0)
+2026-06-04 18:34:18,789 INFO sqlalchemy.engine.Engine SELECT extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.id AS extracted_entities_id, extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IN (?)
+2026-06-04 18:34:18,789 INFO sqlalchemy.engine.Engine [cached since 295.6s ago] (1,)
+2026-06-04 18:34:18,791 INFO sqlalchemy.engine.Engine SELECT risk_predictions.vendor_id AS risk_predictions_vendor_id, risk_predictions.id AS risk_predictions_id, risk_predictions.risk_score AS risk_predictions_risk_score, risk_predictions.risk_label AS risk_predictions_risk_label, risk_predictions.model_version AS risk_predictions_model_version, risk_predictions.feature_payload AS risk_predictions_feature_payload, risk_predictions.predicted_at AS risk_predictions_predicted_at 
+FROM risk_predictions 
+WHERE risk_predictions.vendor_id IN (?)
+2026-06-04 18:34:18,792 INFO sqlalchemy.engine.Engine [cached since 295.6s ago] (1,)
+INFO:     127.0.0.1:59744 - "GET /api/v1/vendors/1 HTTP/1.1" 200 OK
+2026-06-04 18:34:18,795 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:34:20,503 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:34:20,504 INFO sqlalchemy.engine.Engine SELECT vendors.id AS vendors_id, vendors.name AS vendors_name, vendors.gstin AS vendors_gstin, vendors.pan AS vendors_pan, vendors.contact_email AS vendors_contact_email, vendors.contact_phone AS vendors_contact_phone, vendors.address AS vendors_address, vendors.website AS vendors_website, vendors.created_at AS vendors_created_at, vendors.updated_at AS vendors_updated_at 
+FROM vendors ORDER BY vendors.name ASC
+ LIMIT ? OFFSET ?
+2026-06-04 18:34:20,504 INFO sqlalchemy.engine.Engine [cached since 297.3s ago] (100, 0)
+2026-06-04 18:34:20,506 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:34:20,507 INFO sqlalchemy.engine.Engine SELECT extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.id AS extracted_entities_id, extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IN (?)
+2026-06-04 18:34:20,507 INFO sqlalchemy.engine.Engine SELECT vendors.id AS vendors_id, vendors.name AS vendors_name, vendors.gstin AS vendors_gstin, vendors.pan AS vendors_pan, vendors.contact_email AS vendors_contact_email, vendors.contact_phone AS vendors_contact_phone, vendors.address AS vendors_address, vendors.website AS vendors_website, vendors.created_at AS vendors_created_at, vendors.updated_at AS vendors_updated_at 
+FROM vendors
+2026-06-04 18:34:20,508 INFO sqlalchemy.engine.Engine [cached since 297.3s ago] (1,)
+2026-06-04 18:34:20,509 INFO sqlalchemy.engine.Engine [cached since 288.8s ago] ()
+2026-06-04 18:34:20,511 INFO sqlalchemy.engine.Engine SELECT risk_predictions.vendor_id AS risk_predictions_vendor_id, risk_predictions.id AS risk_predictions_id, risk_predictions.risk_score AS risk_predictions_risk_score, risk_predictions.risk_label AS risk_predictions_risk_label, risk_predictions.model_version AS risk_predictions_model_version, risk_predictions.feature_payload AS risk_predictions_feature_payload, risk_predictions.predicted_at AS risk_predictions_predicted_at 
+FROM risk_predictions 
+WHERE risk_predictions.vendor_id IN (?)
+2026-06-04 18:34:20,833 INFO sqlalchemy.engine.Engine SELECT extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.id AS extracted_entities_id, extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IN (?)
+2026-06-04 18:34:20,833 INFO sqlalchemy.engine.Engine [cached since 297.6s ago] (1,)
+2026-06-04 18:34:20,834 INFO sqlalchemy.engine.Engine [cached since 297.6s ago] (1,)
+2026-06-04 18:34:20,839 INFO sqlalchemy.engine.Engine SELECT risk_predictions.vendor_id AS risk_predictions_vendor_id, risk_predictions.id AS risk_predictions_id, risk_predictions.risk_score AS risk_predictions_risk_score, risk_predictions.risk_label AS risk_predictions_risk_label, risk_predictions.model_version AS risk_predictions_model_version, risk_predictions.feature_payload AS risk_predictions_feature_payload, risk_predictions.predicted_at AS risk_predictions_predicted_at 
+FROM risk_predictions 
+WHERE risk_predictions.vendor_id IN (?)
+INFO:     127.0.0.1:50803 - "GET /api/v1/vendors?skip=0&limit=100 HTTP/1.1" 200 OK
+2026-06-04 18:34:20,840 INFO sqlalchemy.engine.Engine [cached since 297.6s ago] (1,)
+2026-06-04 18:34:20,841 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:59744 - "GET /api/v1/vendors/risk-summary HTTP/1.1" 200 OK
+2026-06-04 18:34:20,844 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:34:22,497 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:34:22,499 INFO sqlalchemy.engine.Engine SELECT documents.ocr_status AS documents_ocr_status, count(documents.id) AS count_1 
+FROM documents GROUP BY documents.ocr_status
+2026-06-04 18:34:22,500 INFO sqlalchemy.engine.Engine [cached since 299.3s ago] ()
+2026-06-04 18:34:22,501 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:34:22,502 INFO sqlalchemy.engine.Engine SELECT avg(documents.file_size) AS avg_1 
+FROM documents
+2026-06-04 18:34:22,502 INFO sqlalchemy.engine.Engine SELECT count(vendors.id) AS count_1 
+FROM vendors
+2026-06-04 18:34:22,503 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,503 INFO sqlalchemy.engine.Engine [cached since 299.3s ago] ()
+2026-06-04 18:34:22,505 INFO sqlalchemy.engine.Engine SELECT sum(documents.page_count) AS sum_1 
+FROM documents
+2026-06-04 18:34:22,506 INFO sqlalchemy.engine.Engine SELECT count(distinct(risk_predictions.vendor_id)) AS count_1 
+FROM risk_predictions
+2026-06-04 18:34:22,506 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,506 INFO sqlalchemy.engine.Engine [cached since 299.3s ago] ()
+2026-06-04 18:34:22,509 INFO sqlalchemy.engine.Engine SELECT documents.ocr_method AS documents_ocr_method, count(documents.id) AS count_1 
+FROM documents 
+WHERE documents.ocr_method IS NOT NULL GROUP BY documents.ocr_method
+2026-06-04 18:34:22,510 INFO sqlalchemy.engine.Engine SELECT extracted_entities.vendor_id AS extracted_entities_vendor_id, count(extracted_entities.id) AS doc_count 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IS NOT NULL GROUP BY extracted_entities.vendor_id
+2026-06-04 18:34:22,510 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,510 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,512 INFO sqlalchemy.engine.Engine SELECT documents.mime_type AS documents_mime_type, count(documents.id) AS count_1 
+FROM documents GROUP BY documents.mime_type
+2026-06-04 18:34:22,514 INFO sqlalchemy.engine.Engine SELECT risk_predictions.risk_label AS risk_predictions_risk_label, count(risk_predictions.id) AS count_1 
+FROM risk_predictions JOIN (SELECT risk_predictions.vendor_id AS vendor_id, max(risk_predictions.predicted_at) AS max_ts 
+FROM risk_predictions GROUP BY risk_predictions.vendor_id) AS anon_1 ON risk_predictions.vendor_id = anon_1.vendor_id AND risk_predictions.predicted_at = anon_1.max_ts GROUP BY risk_predictions.risk_label
+2026-06-04 18:34:22,514 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,515 INFO sqlalchemy.engine.Engine [cached since 299.3s ago] ()
+2026-06-04 18:34:22,517 INFO sqlalchemy.engine.Engine SELECT date(documents.created_at) AS day, count(documents.id) AS count 
+FROM documents GROUP BY date(documents.created_at) ORDER BY date(documents.created_at) DESC
+ LIMIT ? OFFSET ?
+2026-06-04 18:34:22,517 INFO sqlalchemy.engine.Engine SELECT count(vendors.id) AS count_1 
+FROM vendors 
+WHERE vendors.contact_email IS NOT NULL
+2026-06-04 18:34:22,517 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] (30, 0)
+2026-06-04 18:34:22,518 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,519 INFO sqlalchemy.engine.Engine SELECT max(documents.created_at) AS max_1 
+FROM documents
+2026-06-04 18:34:22,520 INFO sqlalchemy.engine.Engine SELECT count(vendors.id) AS count_1 
+FROM vendors 
+WHERE vendors.gstin IS NOT NULL
+2026-06-04 18:34:22,520 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,521 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,524 INFO sqlalchemy.engine.Engine SELECT max(vendors.created_at) AS max_1 
+FROM vendors
+INFO:     127.0.0.1:50803 - "GET /api/v1/analytics/documents HTTP/1.1" 200 OK
+2026-06-04 18:34:22,524 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,526 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:59744 - "GET /api/v1/analytics/vendors HTTP/1.1" 200 OK
+2026-06-04 18:34:22,530 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:34:22,604 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:34:22,605 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:34:22,607 INFO sqlalchemy.engine.Engine SELECT risk_predictions.risk_label AS risk_predictions_risk_label, count(risk_predictions.id) AS count_1 
+FROM risk_predictions JOIN (SELECT risk_predictions.vendor_id AS vendor_id, max(risk_predictions.predicted_at) AS max_ts 
+FROM risk_predictions GROUP BY risk_predictions.vendor_id) AS anon_1 ON risk_predictions.vendor_id = anon_1.vendor_id AND risk_predictions.predicted_at = anon_1.max_ts GROUP BY risk_predictions.risk_label
+2026-06-04 18:34:22,608 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:34:22,609 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-04 18:34:22,609 INFO sqlalchemy.engine.Engine SELECT extracted_entities.entity_data AS extracted_entities_entity_data 
+FROM extracted_entities
+2026-06-04 18:34:22,610 INFO sqlalchemy.engine.Engine [cached since 299.4s ago] ()
+2026-06-04 18:34:22,610 INFO sqlalchemy.engine.Engine SELECT extracted_entities.id AS extracted_entities_id, extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IS NOT NULL
+2026-06-04 18:34:22,611 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities
+2026-06-04 18:34:22,612 INFO sqlalchemy.engine.Engine [cached since 299.4s ago] ()
+2026-06-04 18:34:22,613 INFO sqlalchemy.engine.Engine SELECT count(risk_predictions.id) AS count_1 
+FROM risk_predictions
+2026-06-04 18:34:22,613 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,614 INFO sqlalchemy.engine.Engine [cached since 299.4s ago] ()
+2026-06-04 18:34:22,616 INFO sqlalchemy.engine.Engine SELECT extracted_entities.id AS extracted_entities_id, extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities
+2026-06-04 18:34:22,616 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,617 INFO sqlalchemy.engine.Engine SELECT vendors.id AS vendors_id, vendors.name AS vendors_name, vendors.gstin AS vendors_gstin, vendors.pan AS vendors_pan, vendors.contact_email AS vendors_contact_email, vendors.contact_phone AS vendors_contact_phone, vendors.address AS vendors_address, vendors.website AS vendors_website, vendors.created_at AS vendors_created_at, vendors.updated_at AS vendors_updated_at 
+FROM vendors 
+WHERE vendors.id IN (?)
+2026-06-04 18:34:22,618 INFO sqlalchemy.engine.Engine SELECT count(documents.id) AS count_1 
+FROM documents
+2026-06-04 18:34:22,618 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,620 INFO sqlalchemy.engine.Engine SELECT avg(risk_predictions.risk_score) AS avg_1 
+FROM risk_predictions
+2026-06-04 18:34:22,620 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] (1,)
+2026-06-04 18:34:22,621 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+INFO:     127.0.0.1:57968 - "GET /api/v1/analytics/spend-summary HTTP/1.1" 200 OK
+2026-06-04 18:34:22,622 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,625 INFO sqlalchemy.engine.Engine SELECT extracted_entities.vendor_id AS extracted_entities_vendor_id, extracted_entities.id AS extracted_entities_id, extracted_entities.document_id AS extracted_entities_document_id, extracted_entities.entity_type AS extracted_entities_entity_type, extracted_entities.entity_data AS extracted_entities_entity_data, extracted_entities.confidence_score AS extracted_entities_confidence_score, extracted_entities.created_at AS extracted_entities_created_at 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IN (?)
+2026-06-04 18:34:22,627 INFO sqlalchemy.engine.Engine SELECT count(distinct(extracted_entities.document_id)) AS count_1 
+FROM extracted_entities
+2026-06-04 18:34:22,629 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:34:22,630 INFO sqlalchemy.engine.Engine SELECT count(risk_predictions.id) AS count_1 
+FROM risk_predictions 
+WHERE risk_predictions.risk_score >= ? AND risk_predictions.risk_score < ?
+2026-06-04 18:34:22,630 INFO sqlalchemy.engine.Engine [cached since 299.4s ago] (1,)
+2026-06-04 18:34:22,631 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,632 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] (0.0, 0.2)
+2026-06-04 18:34:22,634 INFO sqlalchemy.engine.Engine SELECT risk_predictions.vendor_id AS risk_predictions_vendor_id, risk_predictions.id AS risk_predictions_id, risk_predictions.risk_score AS risk_predictions_risk_score, risk_predictions.risk_label AS risk_predictions_risk_label, risk_predictions.model_version AS risk_predictions_model_version, risk_predictions.feature_payload AS risk_predictions_feature_payload, risk_predictions.predicted_at AS risk_predictions_predicted_at 
+FROM risk_predictions 
+WHERE risk_predictions.vendor_id IN (?)
+2026-06-04 18:34:22,635 INFO sqlalchemy.engine.Engine SELECT extracted_entities.entity_type AS extracted_entities_entity_type, count(extracted_entities.id) AS count_1 
+FROM extracted_entities GROUP BY extracted_entities.entity_type
+2026-06-04 18:34:22,636 INFO sqlalchemy.engine.Engine SELECT count(risk_predictions.id) AS count_1 
+FROM risk_predictions 
+WHERE risk_predictions.risk_score >= ? AND risk_predictions.risk_score < ?
+2026-06-04 18:34:22,636 INFO sqlalchemy.engine.Engine [cached since 299.4s ago] (1,)
+2026-06-04 18:34:22,637 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,637 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] (0.2, 0.4)
+INFO:     127.0.0.1:57969 - "GET /api/v1/analytics/top-vendors?limit=8 HTTP/1.1" 200 OK
+2026-06-04 18:34:22,641 INFO sqlalchemy.engine.Engine SELECT avg(extracted_entities.confidence_score) AS avg_1 
+FROM extracted_entities 
+WHERE extracted_entities.confidence_score IS NOT NULL
+2026-06-04 18:34:22,642 INFO sqlalchemy.engine.Engine SELECT count(risk_predictions.id) AS count_1 
+FROM risk_predictions 
+WHERE risk_predictions.risk_score >= ? AND risk_predictions.risk_score < ?
+2026-06-04 18:34:22,642 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,643 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-04 18:34:22,643 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] (0.4, 0.6)
+2026-06-04 18:34:22,645 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities 
+WHERE extracted_entities.confidence_score IS NOT NULL AND extracted_entities.confidence_score >= ? AND extracted_entities.confidence_score < ?
+2026-06-04 18:34:22,647 INFO sqlalchemy.engine.Engine SELECT count(risk_predictions.id) AS count_1 
+FROM risk_predictions 
+WHERE risk_predictions.risk_score >= ? AND risk_predictions.risk_score < ?
+2026-06-04 18:34:22,647 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] (0.0, 0.25)
+2026-06-04 18:34:22,648 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] (0.6, 0.8)
+2026-06-04 18:34:22,650 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities 
+WHERE extracted_entities.confidence_score IS NOT NULL AND extracted_entities.confidence_score >= ? AND extracted_entities.confidence_score < ?
+2026-06-04 18:34:22,651 INFO sqlalchemy.engine.Engine SELECT count(risk_predictions.id) AS count_1 
+FROM risk_predictions 
+WHERE risk_predictions.risk_score >= ? AND risk_predictions.risk_score < ?
+2026-06-04 18:34:22,651 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] (0.25, 0.5)
+2026-06-04 18:34:22,652 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] (0.8, 1.01)
+2026-06-04 18:34:22,653 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities 
+WHERE extracted_entities.confidence_score IS NOT NULL AND extracted_entities.confidence_score >= ? AND extracted_entities.confidence_score < ?
+2026-06-04 18:34:22,654 INFO sqlalchemy.engine.Engine SELECT risk_predictions.model_version AS risk_predictions_model_version, count(risk_predictions.id) AS count_1 
+FROM risk_predictions GROUP BY risk_predictions.model_version
+2026-06-04 18:34:22,654 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] (0.5, 0.75)
+2026-06-04 18:34:22,655 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,656 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities 
+WHERE extracted_entities.confidence_score IS NOT NULL AND extracted_entities.confidence_score >= ? AND extracted_entities.confidence_score < ?
+2026-06-04 18:34:22,657 INFO sqlalchemy.engine.Engine SELECT max(risk_predictions.predicted_at) AS max_1 
+FROM risk_predictions
+2026-06-04 18:34:22,657 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] (0.75, 1.01)
+2026-06-04 18:34:22,658 INFO sqlalchemy.engine.Engine [cached since 288.7s ago] ()
+2026-06-04 18:34:22,659 INFO sqlalchemy.engine.Engine SELECT count(extracted_entities.id) AS count_1 
+FROM extracted_entities 
+WHERE extracted_entities.vendor_id IS NOT NULL
+2026-06-04 18:34:22,659 INFO sqlalchemy.engine.Engine [cached since 299.4s ago] ()
+INFO:     127.0.0.1:57967 - "GET /api/v1/analytics/risk-distribution HTTP/1.1" 200 OK
+2026-06-04 18:34:22,661 INFO sqlalchemy.engine.Engine SELECT extracted_entities.entity_data AS extracted_entities_entity_data 
+FROM extracted_entities
+2026-06-04 18:34:22,662 INFO sqlalchemy.engine.Engine [cached since 299.4s ago] ()
+2026-06-04 18:34:22,662 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:57970 - "GET /api/v1/analytics/extraction-summary HTTP/1.1" 200 OK
+2026-06-04 18:34:22,667 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:50803 - "GET /api/v1/rag/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59744 - "GET /api/v1/rag/documents-indexed HTTP/1.1" 200 OK
