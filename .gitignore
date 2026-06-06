@@ -41,3 +41,11 @@ ml/models/*.joblib
 node_modules/
 .next/
 .turbo/
+
+# ── Temp / Browser Profiles ────────────────────────────────────
+.tmp/
+*.log
+
+# ── Test artifacts ─────────────────────────────────────────────
+data/test_documents/
+
